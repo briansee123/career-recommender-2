@@ -248,14 +248,16 @@
             </div>
 
             <!-- User Icon with Dropdown (Homepage, My Profile, Log Out) -->
-            <div class="user-menu">
-                <div class="user-icon" onclick="toggleDropdown()">A</div>
-                <div class="dropdown" id="user-dropdown">
-                    <a href="homepage.html">Homepage</a>
-                    <a href="admin-profile.html">My Profile</a>
-                    <a href="login.html" class="logout">Log Out</a>
-                </div>
-            </div>
+            <div class="dropdown" id="user-dropdown">
+    <a href="{{ route('homepage') }}">Homepage</a>
+    <a href="{{ route('admin.profile') }}">My Profile</a>
+    <form method="POST" action="{{ route('logout') }}" style="display: inline;">
+    @csrf
+    <button type="submit" style="background: none; border: none; color: #f87171; cursor: pointer; padding: 14px 20px; width: 100%; text-align: left; font-family: inherit; font-size: inherit;">
+        <i class="fas fa-sign-out-alt"></i> Log Out
+    </button>
+</form>
+</div>
         </div>
     </header>
 

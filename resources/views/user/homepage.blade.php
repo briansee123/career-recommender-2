@@ -501,66 +501,66 @@
             </div>
             
             <div class="jobs-grid">
-                <div class="job-card" onclick="window.location.href='apply.html?job=Software%20Engineer'">
-                    <div class="job-card-content">
-                        <h3>Software Engineer</h3>
-                        <p class="job-info">🏢 Company: Google Inc.</p>
-                        <p class="job-info">📍 Location: Mountain View, CA</p>
-                        <p class="job-info">💼 Skills: Python, C++, AWS</p>
-                        <a href="apply.html?job=Software%20Engineer" class="learn-more">Learn More →</a>
-                    </div>
-                </div>
+    <div class="job-card" onclick="window.location.href='{{ route('apply') }}?job=Software%20Engineer'">
+        <div class="job-card-content">
+            <h3>Software Engineer</h3>
+            <p class="job-info">🏢 Company: Google Inc.</p>
+            <p class="job-info">📍 Location: Mountain View, CA</p>
+            <p class="job-info">💼 Skills: Python, C++, AWS</p>
+            <a href="{{ route('apply') }}?job=Software%20Engineer" class="learn-more">Learn More →</a>
+        </div>
+    </div>
 
-                <div class="job-card" onclick="window.location.href='apply.html?job=Data%20Scientist'">
-                    <div class="job-card-content">
-                        <h3>Data Scientist</h3>
-                        <p class="job-info">🏢 Company: Amazon</p>
-                        <p class="job-info">📍 Location: Seattle, WA</p>
-                        <p class="job-info">💼 Skills: R, Python, Machine Learning</p>
-                        <a href="apply.html?job=Data%20Scientist" class="learn-more">Learn More →</a>
-                    </div>
-                </div>
+    <div class="job-card" onclick="window.location.href='{{ route('apply') }}?job=Data%20Scientist'">
+        <div class="job-card-content">
+            <h3>Data Scientist</h3>
+            <p class="job-info">🏢 Company: Amazon</p>
+            <p class="job-info">📍 Location: Seattle, WA</p>
+            <p class="job-info">💼 Skills: R, Python, Machine Learning</p>
+            <a href="{{ route('apply') }}?job=Data%20Scientist" class="learn-more">Learn More →</a>
+        </div>
+    </div>
 
-                <div class="job-card" onclick="window.location.href='apply.html?job=UX%2FUI%20Designer'">
-                    <div class="job-card-content">
-                        <h3>UX/UI Designer</h3>
-                        <p class="job-info">🏢 Company: Adobe</p>
-                        <p class="job-info">📍 Location: San Jose, CA</p>
-                        <p class="job-info">💼 Skills: Figma, Sketch, Prototyping</p>
-                        <a href="apply.html?job=UX%2FUI%20Designer" class="learn-more">Learn More →</a>
-                    </div>
-                </div>
+    <div class="job-card" onclick="window.location.href='{{ route('apply') }}?job=UX/UI%20Designer'">
+        <div class="job-card-content">
+            <h3>UX/UI Designer</h3>
+            <p class="job-info">🏢 Company: Adobe</p>
+            <p class="job-info">📍 Location: San Jose, CA</p>
+            <p class="job-info">💼 Skills: Figma, Sketch, Prototyping</p>
+            <a href="{{ route('apply') }}?job=UX/UI%20Designer" class="learn-more">Learn More →</a>
+        </div>
+    </div>
 
-                <div class="job-card" onclick="window.location.href='apply.html?job=Marketing%20Analyst'">
-                    <div class="job-card-content">
-                        <h3>Marketing Analyst</h3>
-                        <p class="job-info">🏢 Company: Meta</p>
-                        <p class="job-info">📍 Location: Menlo Park, CA</p>
-                        <p class="job-info">💼 Skills: SEO, SEM, Data Analysis</p>
-                        <a href="apply.html?job=Marketing%20Analyst" class="learn-more">Learn More →</a>
-                    </div>
-                </div>
+    <div class="job-card" onclick="window.location.href='{{ route('apply') }}?job=Marketing%20Analyst'">
+        <div class="job-card-content">
+            <h3>Marketing Analyst</h3>
+            <p class="job-info">🏢 Company: Meta</p>
+            <p class="job-info">📍 Location: Menlo Park, CA</p>
+            <p class="job-info">💼 Skills: SEO, SEM, Data Analysis</p>
+            <a href="{{ route('apply') }}?job=Marketing%20Analyst" class="learn-more">Learn More →</a>
+        </div>
+    </div>
 
-                <div class="job-card" onclick="window.location.href='apply.html?job=Product%20Manager'">
-                    <div class="job-card-content">
-                        <h3>Product Manager</h3>
-                        <p class="job-info">🏢 Company: Apple</p>
-                        <p class="job-info">📍 Location: Cupertino, CA</p>
-                        <p class="job-info">💼 Skills: Agile, Project Management</p>
-                        <a href="apply.html?job=Product%20Manager" class="learn-more">Learn More →</a>
-                    </div>
-                </div>
+    <div class="job-card" onclick="window.location.href='{{ route('apply') }}?job=Product%20Manager'">
+        <div class="job-card-content">
+            <h3>Product Manager</h3>
+            <p class="job-info">🏢 Company: Apple</p>
+            <p class="job-info">📍 Location: Cupertino, CA</p>
+            <p class="job-info">💼 Skills: Agile, Project Management</p>
+            <a href="{{ route('apply') }}?job=Product%20Manager" class="learn-more">Learn More →</a>
+        </div>
+    </div>
 
-                <div class="job-card" onclick="window.location.href='apply.html?job=DevOps%20Engineer'">
-                    <div class="job-card-content">
-                        <h3>DevOps Engineer</h3>
-                        <p class="job-info">🏢 Company: Netflix</p>
-                        <p class="job-info">📍 Location: Los Gatos, CA</p>
-                        <p class="job-info">💼 Skills: Docker, Kubernetes, CI/CD</p>
-                        <a href="apply.html?job=DevOps%20Engineer" class="learn-more">Learn More →</a>
-                    </div>
-                </div>
-            </div>
+    <div class="job-card" onclick="window.location.href='{{ route('apply') }}?job=DevOps%20Engineer'">
+        <div class="job-card-content">
+            <h3>DevOps Engineer</h3>
+            <p class="job-info">🏢 Company: Netflix</p>
+            <p class="job-info">📍 Location: Los Gatos, CA</p>
+            <p class="job-info">💼 Skills: Docker, Kubernetes, CI/CD</p>
+            <a href="{{ route('apply') }}?job=DevOps%20Engineer" class="learn-more">Learn More →</a>
+        </div>
+    </div>
+</div>
 
             <div class="more-jobs-link">
                 <a href="{{ route('jobs') }}">View More Jobs →</a>
