@@ -237,15 +237,21 @@
 <body>
 
     <div class="apply-container">
-        <a href="jobs.html" class="back-link">
+        <a href="{{ route('jobs') }}" class="back-link">
             <i class="fas fa-arrow-left"></i> Back to Jobs
         </a>
 
         <h1 class="apply-title">Apply for Position</h1>
-        <div class="job-name" id="job-title">
-            <i class="fas fa-briefcase"></i> Loading job...
-        </div>
-        <p class="slogan">We’ll help you take the next step in your career journey.</p>
+        <div class="job-name">
+    <i class="fas fa-briefcase"></i> {{ $job ? $job->title : 'Job Position' }}
+</div>
+@if($job)
+    <p class="slogan">
+        at <strong>{{ $job->company }}</strong> • {{ $job->location }}
+    </p>
+@else
+    <p class="slogan">We'll help you take the next step in your career journey.</p>
+@endif
 
         <form id="apply-form">
             <div class="form-group">
@@ -283,7 +289,7 @@
 
             <div class="btn-group">
                 <button type="submit" class="btn submit-btn">Submit Application</button>
-                <button type="button" class="btn back-btn" onclick="history.back()">Cancel</button>
+                <button type="button" class="btn back-btn" onclick="window.location.href='{{ route('jobs') }}'">Cancel</button>
             </div>
         </form>
     </div>
@@ -294,53 +300,44 @@
         <span>Application submitted successfully!</span>
     </div>
 
-    <script>
-        // Get job title from URL
-        const params = new URLSearchParams(window.location.search);
-        const jobTitle = params.get('job') ? decodeURIComponent(params.get('job')) : 'Unknown Position';
-        document.getElementById('job-title').innerHTML = `<i class="fas fa-briefcase"></i> ${jobTitle}`;
+<script>
+    // Simulate resume check from profile
+    const hasResume = localStorage.getItem('userResume') === 'true';
 
-        // Simulate resume check from profile (in real app: fetch from localStorage or API)
-        const hasResume = localStorage.getItem('userResume') === 'true'; // Demo flag
+    const resumeStatus = document.getElementById('resume-status');
+    const uploadArea = document.getElementById('resume-upload-area');
 
-        const resumeSection = document.getElementById('resume-section');
-        const resumeStatus = document.getElementById('resume-status');
-        const uploadArea = document.getElementById('resume-upload-area');
+    if (hasResume) {
+        resumeStatus.innerHTML = `
+            <div class="status-icon status-success"><i class="fas fa-check"></i></div>
+            <span>Your resume is attached automatically</span>
+        `;
+        uploadArea.style.display = 'none';
+    } else {
+        resumeStatus.innerHTML = `
+            <div class="status-icon status-warning"><i class="fas fa-exclamation-triangle"></i></div>
+            <span>No resume found. Please upload or create one.</span>
+        `;
+        uploadArea.style.display = 'block';
+    }
 
-        if (hasResume) {
-            resumeStatus.innerHTML = `
-                <div class="status-icon status-success"><i class="fas fa-check"></i></div>
-                <span>Your resume is attached automatically</span>
-            `;
-            uploadArea.style.display = 'none';
-        } else {
-            resumeStatus.innerHTML = `
-                <div class="status-icon status-warning"><i class="fas fa-exclamation-triangle"></i></div>
-                <span>No resume found. Please upload or create one.</span>
-            `;
-            uploadArea.style.display = 'block';
-        }
+    // File input feedback
+    document.getElementById('resume-file').addEventListener('change', function() {
+        const fileName = this.files[0]?.name || 'No file chosen';
+        document.querySelector('.upload-text').textContent = fileName;
+    });
 
-        // File input feedback
-        document.getElementById('resume-file').addEventListener('change', function() {
-            const fileName = this.files[0]?.name || 'No file chosen';
-            document.querySelector('.upload-text').textContent = fileName;
-        });
+    // Submit form
+    document.getElementById('apply-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const toast = document.getElementById('toast');
+        toast.classList.add('show');
 
-        // Submit form
-        document.getElementById('apply-form').addEventListener('submit', function(e) {
-            e.preventDefault();
+        setTimeout(() => {
+            toast.classList.remove('show');
+        }, 3000);
+    });
+</script>
 
-            // In real app: validate + send to backend
-            const toast = document.getElementById('toast');
-            toast.classList.add('show');
-
-            setTimeout(() => {
-                toast.classList.remove('show');
-                // Optional: redirect
-                // window.location.href = 'jobs.html';
-            }, 3000);
-        });
-    </script>
 </body>
 </html>

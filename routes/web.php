@@ -19,10 +19,11 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 // ========== USER ROUTES (PROTECTED) ==========
 Route::middleware(['auth'])->group(function () {
-    Route::get('/homepage', function () {
-        return view('user.homepage');
-    })->name('homepage');
-
+    Route::get('/homepage', [App\Http\Controllers\JobController::class, 'homepage'])->name('homepage');
+    Route::get('/jobs', [App\Http\Controllers\JobController::class, 'index'])->name('jobs');
+    Route::get('/apply', [App\Http\Controllers\JobController::class, 'showApply'])->name('apply');
+    Route::post('/apply', [App\Http\Controllers\JobController::class, 'apply'])->name('apply.submit');
+    
     Route::get('/profile', function () {
         return view('user.profile');
     })->name('profile');
@@ -30,14 +31,6 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/test', function () {
         return view('user.test');
     })->name('test');
-
-    Route::get('/jobs', function () {
-        return view('user.jobs');
-    })->name('jobs');
-
-    Route::get('/apply', function () {
-        return view('user.apply');
-    })->name('apply');
 
     Route::get('/buildresume', function () {
         return view('user.buildresume');

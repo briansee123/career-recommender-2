@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CAREER PATH RECOMMENDER</title>
+    <title>Browse Jobs - Career Path Recommender</title>
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
@@ -147,51 +147,28 @@
             font-size: 0.95rem;
             transition: 0.2s;
         }
-        .dropdown a:hover {
-            background: #334155;
-        }
-        .dropdown a.logout {
+        .dropdown a:hover { background: #334155; }
+        .dropdown button {
+            background: none;
+            border: none;
             color: #f87171;
-            border-top: 1px solid #334155;
-        }
-
-        /* Nav Tabs */
-        .nav-tabs {
-            display: flex;
-            gap: 32px;
-            margin: 20px 0;
-            border-bottom: 1px solid #334155;
-            overflow-x: auto;
-            padding-bottom: 8px;
-        }
-        .nav-tabs a {
-            color: #94a3b8;
-            text-decoration: none;
-            font-weight: 600;
-            padding: 8px 0;
-            white-space: nowrap;
-            position: relative;
-        }
-        .nav-tabs a.active {
-            color: #10b981;
-        }
-        .nav-tabs a.active::after {
-            content: '';
-            position: absolute;
-            bottom: -9px;
-            left: 0;
+            cursor: pointer;
+            padding: 12px 16px;
             width: 100%;
-            height: 3px;
-            background: #10b981;
-            border-radius: 2px;
+            text-align: left;
+            font-family: inherit;
+            font-size: 0.95rem;
+            transition: 0.2s;
         }
+        .dropdown button:hover { background: #334155; }
 
         /* Main Content */
         .main-content {
             display: grid;
-            grid-template-columns: 1fr 340px;
+            grid-template-columns: 280px 1fr;
             gap: 24px;
             margin-top: 20px;
+            padding-bottom: 40px;
         }
 
         /* Filters */
@@ -201,17 +178,23 @@
             padding: 20px;
             height: fit-content;
             box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            position: sticky;
+            top: 80px;
+        }
+        .filter-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #e2e8f0;
+            margin-bottom: 20px;
         }
         .filter-group {
             margin-bottom: 20px;
         }
         .filter-group h3 {
-            font-size: 1.1rem;
-            margin-bottom: 12px;
-            color: #e2e8f0;
-            display: flex;
-            align-items: center;
-            gap: 8px;
+            font-size: 0.95rem;
+            margin-bottom: 10px;
+            color: #cbd5e1;
+            font-weight: 600;
         }
         .filter-group select, .filter-group input {
             width: 100%;
@@ -222,46 +205,47 @@
             color: #e2e8f0;
             font-size: 0.95rem;
         }
-        .location-near-me {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-top: 8px;
-        }
-        .location-near-me input[type="checkbox"] {
-            accent-color: #10b981;
-        }
-        .range-slider {
-            -webkit-appearance: none;
-            height: 6px;
-            border-radius: 3px;
-            background: #334155;
-            outline: none;
-            margin: 12px 0;
-        }
-        .range-slider::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            width: 18px;
-            height: 18px;
-            background: #10b981;
-            border-radius: 50%;
-            cursor: pointer;
-        }
 
         /* Job List */
+        .job-list-section {
+            background: #1e293b;
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .results-info {
+            color: #94a3b8;
+            font-size: 0.95rem;
+        }
+        .sort-by select {
+            padding: 8px 12px;
+            background: #0f172a;
+            border: 1px solid #334155;
+            border-radius: 10px;
+            color: #e2e8f0;
+            font-size: 0.9rem;
+        }
+
         .job-list {
             display: flex;
             flex-direction: column;
             gap: 16px;
         }
         .job-card {
-            background: #1e293b;
+            background: #0f172a;
             border-radius: 16px;
             padding: 20px;
             transition: all 0.3s ease;
             border: 1px solid #334155;
-            position: relative;
-            overflow: hidden;
+            cursor: pointer;
         }
         .job-card:hover {
             transform: translateY(-4px);
@@ -294,6 +278,7 @@
             border-radius: 8px;
             font-size: 0.9rem;
             font-weight: 600;
+            white-space: nowrap;
         }
         .job-meta {
             display: flex;
@@ -324,17 +309,41 @@
             transform: scale(1.05);
         }
 
-        /* Results Info & Location */
-        .results-info {
-            color: #94a3b8;
-            font-size: 0.95rem;
-            margin-bottom: 16px;
+        /* Pagination */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+        .pagination a, .pagination span {
+            padding: 10px 16px;
+            background: #0f172a;
+            border: 1px solid #334155;
+            border-radius: 10px;
+            color: #e2e8f0;
+            text-decoration: none;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+        .pagination a:hover {
+            background: #10b981;
+            border-color: #10b981;
+        }
+        .pagination .active {
+            background: #10b981;
+            border-color: #10b981;
+        }
+        .pagination .disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
         }
 
         /* Responsive */
         @media (max-width: 992px) {
             .main-content { grid-template-columns: 1fr; }
-            .filters { order: 2; }
+            .filters { position: static; }
         }
         @media (max-width: 768px) {
             .header-top { flex-direction: column; align-items: stretch; }
@@ -350,23 +359,26 @@
             <div class="header-top">
                 <div class="logo">
                     <img src="https://via.placeholder.com/36?text=CP" alt="Logo">
-                    <span class="title">CAREER PATH RECOMMENDER</span>
+                    <span class="title">JOB PARTNER</span>
                 </div>
                 <div class="search-bar">
                     <input type="text" placeholder="Search jobs, skills, companies...">
                     <button><i class="fas fa-search"></i></button>
                 </div>
                 <div class="nav-links">
-                    <a href="homepage.html">Home</a>
-                    <a href="jobs.html" class="active">More Jobs</a>
-                    <a href="test.html">Test Now</a>
+                    <a href="{{ route('homepage') }}">Home</a>
+                    <a href="{{ route('jobs') }}" class="active">More Jobs</a>
+                    <a href="{{ route('test') }}">Test Now</a>
                     <div class="user-menu">
                         <div class="user-icon" onclick="toggleDropdown()">
                             <i class="fas fa-user"></i>
                         </div>
                         <div class="dropdown" id="user-dropdown">
-                            <a href="profile.html"><i class="fas fa-user-circle"></i> My Profile</a>
-                            <a href="#" class="logout"><i class="fas fa-sign-out-alt"></i> Log Out</a>
+                            <a href="{{ route('profile') }}"><i class="fas fa-user-circle"></i> My Profile</a>
+                            <form method="POST" action="{{ route('logout') }}" style="margin: 0;">
+                                @csrf
+                                <button type="submit"><i class="fas fa-sign-out-alt"></i> Log Out</button>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -374,157 +386,119 @@
         </div>
     </header>
 
-    <!-- Nav Tabs -->
-    <div class="container">
-        <div class="nav-tabs">
-            <a href="#" class="active">Jobs</a>
-            <a href="#">Companies</a>
-            <a href="#">Forums</a>
-        </div>
-    </div>
-
     <!-- Main Content -->
     <div class="container">
-        <div class="results-info">
-            Showing <strong>83,408</strong> jobs results in <strong>Malaysia</strong>
-        </div>
-
         <div class="main-content">
-            <!-- Job List -->
-            <div class="job-list">
-                <!-- Job Card 1 -->
-                <div class="job-card">
-                    <div class="job-header">
-                        <div>
-                            <div class="job-title">Junior Graphic Designer</div>
-                            <div class="company"><i class="fas fa-palette"></i> CreativeBloom Studio</div>
-                        </div>
-                        <span class="salary">MYR 2,800 - 3,800</span>
-                    </div>
-                    <div class="job-meta">
-                        <span><i class="fas fa-map-marker-alt"></i> Kuala Lumpur</span>
-                        <span class="tag">Full Time</span>
-                        <span class="tag">Fresh Grad</span>
-                        <span class="tag">Medical</span>
-                    </div>
-                    <button class="apply-btn">Apply Now</button>
-                </div>
-
-                <!-- Job Card 2 -->
-                <div class="job-card">
-                    <div class="job-header">
-                        <div>
-                            <div class="job-title">Content Writer (Part-Time)</div>
-                            <div class="company"><i class="fas fa-pen-fancy"></i> StoryCraft Media</div>
-                        </div>
-                        <span class="salary">MYR 1,200 - 2,000</span>
-                    </div>
-                    <div class="job-meta">
-                        <span><i class="fas fa-map-marker-alt"></i> Remote</span>
-                        <span class="tag">Part Time</span>
-                        <span class="tag">Flexible</span>
-                        <span class="tag">WFH</span>
-                    </div>
-                    <button class="apply-btn">Apply Now</button>
-                </div>
-
-                <!-- Job Card 3 -->
-                <div class="job-card">
-                    <div class="job-header">
-                        <div>
-                            <div class="job-title">Frontend Developer</div>
-                            <div class="company"><i class="fas fa-code"></i> NexaTech</div>
-                        </div>
-                        <span class="salary">MYR 4,500 - 6,500</span>
-                    </div>
-                    <div class="job-meta">
-                        <span><i class="fas fa-map-marker-alt"></i> Cyberjaya</span>
-                        <span class="tag">Full Time</span>
-                        <span class="tag">Hybrid</span>
-                        <span class="tag">Dental</span>
-                    </div>
-                    <button class="apply-btn">Apply Now</button>
-                </div>
-            </div>
-
             <!-- Filters Sidebar -->
             <div class="filters">
-                <div class="filter-group">
-                    <h3>Salary Range</h3>
-                    <input type="range" class="range-slider" min="1000" max="10000" value="5000">
-                    <div style="display:flex; justify-content:space-between; font-size:0.85rem; color:#94a3b8;">
-                        <span>RM 1,000</span>
-                        <span>RM 10,000+</span>
+                <div class="filter-title">🔍 Filters</div>
+                
+                <form method="GET" action="{{ route('jobs') }}">
+                    <div class="filter-group">
+                        <h3>Job Type</h3>
+                        <select name="job_type">
+                            <option value="">All Types</option>
+                            <option value="full-time">Full Time</option>
+                            <option value="part-time">Part Time</option>
+                            <option value="contract">Contract</option>
+                            <option value="internship">Internship</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-group">
+                        <h3>Location</h3>
+                        <input type="text" name="location" placeholder="e.g. Kuala Lumpur" value="{{ request('location') }}">
+                    </div>
+
+                    <button type="submit" style="width: 100%; padding: 10px; background: #10b981; color: white; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; margin-top: 10px;">
+                        Apply Filters
+                    </button>
+                </form>
+            </div>
+
+            <!-- Job List -->
+            <div class="job-list-section">
+                <div class="results-header">
+                    <div class="results-info">
+                        Showing <strong>{{ $jobs->count() }}</strong> of <strong>{{ $jobs->total() }}</strong> jobs
+                    </div>
+                    <div class="sort-by">
+                        <select onchange="window.location.href='?sort='+this.value">
+                            <option value="newest">Newest First</option>
+                            <option value="oldest">Oldest First</option>
+                        </select>
                     </div>
                 </div>
 
-                <div class="filter-group">
-                    <h3>Job Type</h3>
-                    <select>
-                        <option>All Types</option>
-                        <option>Full Time</option>
-                        <option>Part Time</option>
-                        <option>Internship</option>
-                        <option>Contract</option>
-                    </select>
+                <div class="job-list">
+                    @forelse($jobs as $job)
+                        <div class="job-card" onclick="window.location.href='{{ route('apply') }}?id={{ $job->id }}'">
+                            <div class="job-header">
+                                <div>
+                                    <div class="job-title">{{ $job->title }}</div>
+                                    <div class="company"><i class="fas fa-building"></i> {{ $job->company }}</div>
+                                </div>
+                                @if($job->salary)
+                                    <span class="salary">{{ $job->salary }}</span>
+                                @endif
+                            </div>
+                            <div class="job-meta">
+                                <span><i class="fas fa-map-marker-alt"></i> {{ $job->location }}</span>
+                                <span class="tag">{{ ucfirst(str_replace('-', ' ', $job->job_type)) }}</span>
+                                @if($job->required_skills)
+                                    @foreach(array_slice($job->required_skills, 0, 3) as $skill)
+                                        <span class="tag">{{ $skill }}</span>
+                                    @endforeach
+                                @endif
+                            </div>
+                            <button class="apply-btn" onclick="event.stopPropagation(); window.location.href='{{ route('apply') }}?id={{ $job->id }}'">Apply Now</button>
+                        </div>
+                    @empty
+                        <div style="text-align: center; padding: 60px 20px;">
+                            <i class="fas fa-briefcase" style="font-size: 4rem; color: #334155; margin-bottom: 20px;"></i>
+                            <p style="font-size: 1.2rem; color: #94a3b8;">No jobs found. Try adjusting your filters!</p>
+                        </div>
+                    @endforelse
                 </div>
 
-                <div class="filter-group">
-                    <h3>Date Posted</h3>
-                    <select>
-                        <option>Any Time</option>
-                        <option>Last 24 Hours</option>
-                        <option>Last 3 Days</option>
-                        <option>Last Week</option>
-                    </select>
-                </div>
+                <!-- Pagination -->
+                @if($jobs->hasPages())
+                    <div class="pagination">
+                        {{-- Previous Page Link --}}
+                        @if ($jobs->onFirstPage())
+                            <span class="disabled">« Previous</span>
+                        @else
+                            <a href="{{ $jobs->previousPageUrl() }}">« Previous</a>
+                        @endif
 
-                <div class="filter-group">
-                    <h3>Benefits</h3>
-                    <select>
-                        <option>Any</option>
-                        <option>Medical Coverage</option>
-                        <option>Dental</option>
-                        <option>EPF & SOCSO</option>
-                        <option>Annual Leave</option>
-                    </select>
-                </div>
+                        {{-- Pagination Elements --}}
+                        @foreach ($jobs->getUrlRange(1, $jobs->lastPage()) as $page => $url)
+                            @if ($page == $jobs->currentPage())
+                                <span class="active">{{ $page }}</span>
+                            @else
+                                <a href="{{ $url }}">{{ $page }}</a>
+                            @endif
+                        @endforeach
 
-                <div class="filter-group">
-                    <h3>Location Near Me</h3>
-                    <div class="location-near-me">
-                        <input type="checkbox" id="near-me">
-                        <label for="near-me" style="font-size:0.9rem; cursor:pointer;">Use my location</label>
+                        {{-- Next Page Link --}}
+                        @if ($jobs->hasMorePages())
+                            <a href="{{ $jobs->nextPageUrl() }}">Next »</a>
+                        @else
+                            <span class="disabled">Next »</span>
+                        @endif
                     </div>
-                    <select style="margin-top:8px;">
-                        <option>Within 1 KM</option>
-                        <option>Within 5 KM</option>
-                        <option>Within 10 KM</option>
-                        <option>Within 25 KM</option>
-                    </select>
-                </div>
+                @endif
             </div>
         </div>
     </div>
 
     <script>
-        // Toggle User Dropdown
         function toggleDropdown() {
-            const dropdown = document.getElementById('user-dropdown');
-            dropdown.classList.toggle('show');
+            document.getElementById('user-dropdown').classList.toggle('show');
         }
-
-        // Close dropdown when clicking outside
         window.addEventListener('click', function(e) {
             if (!e.target.closest('.user-menu')) {
                 document.getElementById('user-dropdown').classList.remove('show');
-            }
-        });
-
-        // Demo: Location alert
-        document.getElementById('near-me').addEventListener('change', function() {
-            if (this.checked) {
-                alert('Location access enabled! Showing jobs near you...');
             }
         });
     </script>

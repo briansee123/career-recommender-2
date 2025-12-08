@@ -248,7 +248,21 @@
             </div>
 
             <!-- User Icon with Dropdown (Homepage, My Profile, Log Out) -->
-            <div class="dropdown" id="user-dropdown">
+<div class="user-menu">
+    <div class="user-icon" onclick="toggleDropdown()">
+        <i class="fas fa-user"></i>
+    </div>
+    <div class="dropdown" id="user-dropdown">
+        <a href="{{ route('homepage') }}">Homepage</a>
+        <a href="{{ route('admin.profile') }}">My Profile</a>
+        <form method="POST" action="{{ route('logout') }}" style="display: inline;">
+            @csrf
+            <button type="submit" style="background: none; border: none; color: #f87171; cursor: pointer; padding: 14px 20px; width: 100%; text-align: left; font-family: inherit; font-size: inherit;">
+                <i class="fas fa-sign-out-alt"></i> Log Out
+            </button>
+        </form>
+    </div>
+</div>
     <a href="{{ route('homepage') }}">Homepage</a>
     <a href="{{ route('admin.profile') }}">My Profile</a>
     <form method="POST" action="{{ route('logout') }}" style="display: inline;">
