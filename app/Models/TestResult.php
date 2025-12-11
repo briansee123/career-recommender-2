@@ -12,20 +12,48 @@ class TestResult extends Model
     protected $fillable = [
         'user_id',
         'mbti_type',
-        'recommended_careers',
         'skills',
         'interests',
         'academic_background',
-        'answers'
+        'personality_answers',
+        'ai_recommendations',
     ];
 
     protected $casts = [
-        'answers' => 'array'
+        'personality_answers' => 'array',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
     ];
 
-    // Relationship: Test result belongs to a user
+    /**
+     * Get the user that owns the test result
+     */
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    /**
+     * Get formatted date for display
+     */
+    public function getFormattedDateAttribute()
+    {
+        return $this->created_at->format('F j, Y - g:i A');
+    }
+
+    /**
+     * Get skills as array
+     */
+    public function getSkillsArrayAttribute()
+    {
+        return explode(',', $this->skills);
+    }
+
+    /**
+     * Get interests as array
+     */
+    public function getInterestsArrayAttribute()
+    {
+        return explode(',', $this->interests);
     }
 }

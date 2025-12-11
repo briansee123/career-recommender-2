@@ -6,338 +6,564 @@
     <title>Apply for Job - Career Path Recommender</title>
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Quicksand', sans-serif;
-            background: #121826;
-            color: #e2e8f0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
             min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Floating Circles Animation */
+        .floating-circles {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 0;
+            pointer-events: none;
+        }
+        .circle {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            animation: float 20s infinite ease-in-out;
+        }
+        .circle:nth-child(1) {
+            width: 80px;
+            height: 80px;
+            top: 10%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+        .circle:nth-child(2) {
+            width: 120px;
+            height: 120px;
+            top: 60%;
+            right: 10%;
+            animation-delay: 5s;
+        }
+        .circle:nth-child(3) {
+            width: 60px;
+            height: 60px;
+            bottom: 20%;
+            left: 20%;
+            animation-delay: 10s;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) translateX(0px); }
+            25% { transform: translateY(-30px) translateX(20px); }
+            50% { transform: translateY(-60px) translateX(-20px); }
+            75% { transform: translateY(-30px) translateX(20px); }
+        }
+
+        /* Header */
+        header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 15px 0;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #667eea;
+        }
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+        }
+        .nav-links a {
+            text-decoration: none;
+            color: #555;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        .nav-links a:hover {
+            color: #667eea;
+        }
+        .user-menu {
+            position: relative;
+        }
+        .user-icon-nav {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea, #764ba2);
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 20px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.3s;
+            font-size: 1.2rem;
         }
-        .apply-container {
-            background: #1e293b;
-            border-radius: 20px;
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
-            max-width: 680px;
-            width: 100%;
-            padding: 40px 36px;
-            position: relative;
-            overflow: hidden;
+        .user-icon-nav:hover {
+            transform: scale(1.1);
         }
-        .apply-container::before {
-            content: '';
+        .dropdown {
             position: absolute;
-            top: 0; left: 0; right: 0; height: 4px;
-            background: linear-gradient(90deg, #10b981, #34d399);
+            top: 50px;
+            right: 0;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.15);
+            min-width: 160px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.3s;
+            z-index: 10000;
+        }
+        .dropdown.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        .dropdown a {
+            display: block;
+            padding: 12px 20px;
+            color: #555;
+            text-decoration: none;
+            transition: background 0.3s;
+        }
+        .dropdown a:hover {
+            background: #f5f5f5;
+        }
+
+        /* Main Container */
+        .apply-container {
+            position: relative;
+            z-index: 1;
+            max-width: 700px;
+            width: 100%;
+            margin: 60px auto;
+            padding: 20px;
         }
 
         .back-link {
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            color: #94a3b8;
-            font-size: 0.95rem;
-            font-weight: 500;
+            color: white;
+            font-size: 1rem;
+            font-weight: 600;
             text-decoration: none;
             margin-bottom: 20px;
-            transition: 0.2s;
+            transition: 0.3s;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 10px 20px;
+            border-radius: 25px;
+            backdrop-filter: blur(10px);
         }
-        .back-link:hover { color: #e2e8f0; }
+        .back-link:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateX(-5px);
+        }
+
+        .apply-card {
+            background: white;
+            border-radius: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+            padding: 50px 40px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .apply-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: linear-gradient(90deg, #667eea, #764ba2, #f093fb);
+        }
 
         .apply-title {
-            font-size: 2rem;
+            font-size: 2.5rem;
             font-weight: 700;
-            color: #e2e8f0;
-            margin-bottom: 8px;
+            color: #667eea;
+            margin-bottom: 10px;
+            text-align: center;
         }
+
         .job-name {
-            font-size: 1.4rem;
+            font-size: 1.5rem;
             font-weight: 600;
-            color: #10b981;
-            margin-bottom: 12px;
+            color: #764ba2;
+            margin-bottom: 15px;
+            text-align: center;
             display: flex;
             align-items: center;
-            gap: 8px;
+            justify-content: center;
+            gap: 10px;
         }
+
         .slogan {
-            color: #94a3b8;
-            font-size: 1.05rem;
-            margin-bottom: 28px;
+            color: #999;
+            font-size: 1.1rem;
+            margin-bottom: 40px;
+            text-align: center;
             font-weight: 500;
         }
 
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 25px;
         }
+
         .form-group label {
             display: block;
             font-weight: 600;
-            color: #cbd5e1;
-            margin-bottom: 8px;
+            color: #555;
+            margin-bottom: 10px;
             font-size: 1rem;
         }
+
         .form-group input {
             width: 100%;
-            padding: 14px 16px;
-            background: #0f172a;
-            border: 1px solid #334155;
-            border-radius: 12px;
-            color: #e2e8f0;
+            padding: 15px 20px;
+            background: #f8f9ff;
+            border: 2px solid #e0e7ff;
+            border-radius: 15px;
+            color: #333;
             font-size: 1rem;
             transition: all 0.3s ease;
+            font-family: 'Quicksand', sans-serif;
         }
+
         .form-group input:focus {
             outline: none;
-            border-color: #10b981;
-            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
+            border-color: #667eea;
+            background: white;
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
         }
 
         /* Resume Section */
         .resume-section {
-            background: #0f172a;
-            border: 1px solid #334155;
-            border-radius: 14px;
-            padding: 18px;
-            margin-bottom: 24px;
+            background: linear-gradient(135deg, #f8f9ff 0%, #e0e7ff 100%);
+            border: 2px dashed #667eea;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            text-align: center;
             position: relative;
         }
-        .resume-status {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 0.95rem;
-            margin-bottom: 12px;
-        }
-        .status-icon {
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.8rem;
-        }
-        .status-success { background: #064e3b; color: #6ee7b7; }
-        .status-warning { background: #7c2d12; color: #fdba74; }
 
-        .upload-area {
-            border: 2px dashed #334155;
-            border-radius: 12px;
-            padding: 20px;
-            text-align: center;
-            cursor: pointer;
-            transition: 0.3s;
-            background: #1e293b;
+        .resume-icon {
+            font-size: 3rem;
+            color: #667eea;
+            margin-bottom: 15px;
         }
-        .upload-area:hover {
-            border-color: #10b981;
-            background: #0f172a;
-        }
-        .upload-area input[type="file"] {
-            display: none;
-        }
-        .upload-text {
-            color: #94a3b8;
-            font-size: 0.95rem;
-        }
-        .upload-btn {
-            background: #334155;
-            color: #e2e8f0;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 8px;
-            font-size: 0.9rem;
-            cursor: pointer;
-            margin-top: 10px;
-            transition: 0.2s;
-        }
-        .upload-btn:hover { background: #10b981; }
 
-        .build-resume {
-            margin-top: 12px;
-            font-size: 0.9rem;
-            color: #3b82f6;
-            text-decoration: none;
+        .resume-text {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .resume-subtext {
+            color: #999;
+            font-size: 0.95rem;
+            margin-bottom: 20px;
+        }
+
+        .file-input-wrapper {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+        }
+
+        .file-input-wrapper input[type=file] {
+            position: absolute;
+            left: -9999px;
+        }
+
+        .choose-file-btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 12px 35px;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
             display: inline-flex;
             align-items: center;
-            gap: 6px;
+            gap: 10px;
+            transition: all 0.3s;
+            border: none;
+            font-size: 1rem;
         }
-        .build-resume:hover { color: #60a5fa; }
+
+        .choose-file-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .file-name {
+            margin-top: 15px;
+            font-size: 0.9rem;
+            color: #667eea;
+            font-weight: 600;
+        }
+
+        .build-resume-link {
+            margin-top: 15px;
+            display: block;
+            color: #f093fb;
+            text-decoration: none;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+
+        .build-resume-link:hover {
+            color: #764ba2;
+        }
 
         /* Buttons */
         .btn-group {
             display: flex;
-            gap: 12px;
-            margin-top: 20px;
-        }
-        .btn {
-            flex: 1;
-            padding: 14px 0;
-            border: none;
-            border-radius: 12px;
-            font-weight: 600;
-            font-size: 1.05rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        .submit-btn {
-            background: linear-gradient(90deg, #10b981, #34d399);
-            color: white;
-        }
-        .submit-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3);
-        }
-        .back-btn {
-            background: #334155;
-            color: #e2e8f0;
-        }
-        .back-btn:hover {
-            background: #475569;
-            transform: translateY(-2px);
+            gap: 15px;
+            margin-top: 40px;
         }
 
-        /* Toast Notification */
-        .toast {
-            position: fixed;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #10b981;
-            color: white;
-            padding: 14px 24px;
-            border-radius: 12px;
-            font-weight: 600;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        .btn {
+            flex: 1;
+            padding: 18px 0;
+            border: none;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
             display: flex;
             align-items: center;
+            justify-content: center;
             gap: 10px;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.4s ease;
-            z-index: 1000;
         }
-        .toast.show {
-            opacity: 1;
-            visibility: visible;
-            transform: translateX(-50%) translateY(-10px);
+
+        .submit-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.4);
+        }
+
+        .back-btn {
+            background: #f5f5f5;
+            color: #666;
+        }
+
+        .back-btn:hover {
+            background: #e0e0e0;
+            transform: translateY(-3px);
+        }
+
+        /* Success Message */
+        .success-toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 20px 30px;
+            border-radius: 20px;
+            font-weight: 600;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            display: none;
+            align-items: center;
+            gap: 12px;
+            z-index: 10000;
+            animation: slideIn 0.4s ease;
+        }
+
+        .success-toast.show {
+            display: flex;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
         }
 
         /* Responsive */
-        @media (max-width: 480px) {
-            .apply-container { padding: 32px 24px; }
-            .btn-group { flex-direction: column; }
+        @media (max-width: 768px) {
+            .apply-card {
+                padding: 40px 25px;
+            }
+            .btn-group {
+                flex-direction: column;
+            }
+            .nav-links {
+                gap: 15px;
+            }
         }
     </style>
 </head>
 <body>
+    <!-- Floating Background -->
+    <div class="floating-circles">
+        <div class="circle"></div>
+        <div class="circle"></div>
+        <div class="circle"></div>
+    </div>
 
+    <!-- Header -->
+    <header>
+        <div class="nav-container">
+            <div class="logo">JOB PARTNER</div>
+            <div class="nav-links">
+                <a href="{{ route('homepage') }}">Home</a>
+                <a href="{{ route('jobs') }}">More Jobs</a>
+                <a href="{{ route('test') }}">Test Now</a>
+                <div class="user-menu">
+                    <div class="user-icon-nav" onclick="toggleDropdown()">
+                        {{ auth()->user()->avatar ?? '👤' }}
+                    </div>
+                    <div class="dropdown" id="userDropdown">
+                        <a href="{{ route('profile') }}">Go Profile</a>
+                        <form action="{{ route('logout') }}" method="POST" style="margin: 0;">
+                            @csrf
+                            <a href="#" onclick="event.preventDefault(); this.closest('form').submit();">Log Out</a>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
     <div class="apply-container">
         <a href="{{ route('jobs') }}" class="back-link">
             <i class="fas fa-arrow-left"></i> Back to Jobs
         </a>
 
-        <h1 class="apply-title">Apply for Position</h1>
-        <div class="job-name">
-    <i class="fas fa-briefcase"></i> {{ $job ? $job->title : 'Job Position' }}
-</div>
-@if($job)
-    <p class="slogan">
-        at <strong>{{ $job->company }}</strong> • {{ $job->location }}
-    </p>
-@else
-    <p class="slogan">We'll help you take the next step in your career journey.</p>
-@endif
-
-        <form id="apply-form">
-            <div class="form-group">
-                <label for="name">Full Name</label>
-                <input type="text" id="name" required placeholder="e.g. Alex Tan">
+        <div class="apply-card">
+            <h1 class="apply-title">Apply for Position</h1>
+            <div class="job-name">
+                <i class="fas fa-briefcase"></i>
+                {{ $job->title }}
             </div>
+            <p class="slogan">✨ We'll help you take the next step in your career journey ✨</p>
 
-            <div class="form-group">
-                <label for="email">Email Address</label>
-                <input type="email" id="email" required placeholder="alex@example.com">
-            </div>
+            <form action="{{ route('apply.submit') }}" method="POST" enctype="multipart/form-data" id="apply-form">
+                @csrf
+                <input type="hidden" name="job_listing_id" value="{{ $job->id }}">
 
-            <div class="form-group">
-                <label for="phone">Phone Number</label>
-                <input type="tel" id="phone" required placeholder="+60 12-345 6789">
-            </div>
-
-            <!-- Resume Section -->
-            <div class="resume-section" id="resume-section">
-                <div class="resume-status" id="resume-status">
-                    <!-- Dynamically updated -->
+                <div class="form-group">
+                    <label for="name"><i class="fas fa-user"></i> Full Name</label>
+                    <input type="text" id="name" name="full_name" value="{{ auth()->user()->name }}" required placeholder="e.g. Alex Tan">
                 </div>
-                <div id="resume-upload-area" class="upload-area">
-                    <input type="file" id="resume-file" accept=".pdf,.doc,.docx">
-                    <i class="fas fa-cloud-upload-alt" style="font-size:1.5rem; color:#94a3b8;"></i>
-                    <p class="upload-text">Drop your resume here or click to browse</p>
-                    <button type="button" class="upload-btn" onclick="document.getElementById('resume-file').click()">
-                        Choose File
+
+                <div class="form-group">
+                    <label for="email"><i class="fas fa-envelope"></i> Email Address</label>
+                    <input type="email" id="email" name="email" value="{{ auth()->user()->email }}" required placeholder="alex@example.com">
+                </div>
+
+                <div class="form-group">
+                    <label for="phone"><i class="fas fa-phone"></i> Phone Number</label>
+                    <input type="tel" id="phone" name="phone" value="{{ auth()->user()->phone }}" required placeholder="+60 12-345 6789">
+                </div>
+
+                <!-- Resume Section -->
+                <div class="resume-section">
+                    <div class="resume-icon"><i class="fas fa-file-upload"></i></div>
+                    <div class="resume-text">Upload Your Resume</div>
+                    <div class="resume-subtext">PDF, DOC, DOCX (Max 5MB)</div>
+                    
+                    <div class="file-input-wrapper">
+                        <label for="resume-file" class="choose-file-btn">
+                            <i class="fas fa-cloud-upload-alt"></i> Choose File
+                        </label>
+                        <input type="file" id="resume-file" name="resume" accept=".pdf,.doc,.docx" onchange="showFileName()">
+                    </div>
+                    
+                    <div class="file-name" id="file-name"></div>
+                    
+                    <a href="{{ route('buildresume') }}" class="build-resume-link">
+                        <i class="fas fa-magic"></i> Or build one with our AI Resume Builder
+                    </a>
+                </div>
+
+                <div class="btn-group">
+                    <button type="submit" class="btn submit-btn">
+                        <i class="fas fa-paper-plane"></i> Submit Application
+                    </button>
+                    <button type="button" class="btn back-btn" onclick="history.back()">
+                        <i class="fas fa-times"></i> Cancel
                     </button>
                 </div>
-                <a href="profile.html#resume-builder" class="build-resume">
-                    <i class="fas fa-magic"></i> Or build one with our AI Resume Maker
-                </a>
-            </div>
-
-            <div class="btn-group">
-                <button type="submit" class="btn submit-btn">Submit Application</button>
-                <button type="button" class="btn back-btn" onclick="window.location.href='{{ route('jobs') }}'">Cancel</button>
-            </div>
-        </form>
+            </form>
+        </div>
     </div>
 
-    <!-- Toast Notification -->
-    <div class="toast" id="toast">
-        <i class="fas fa-check-circle"></i>
+    <!-- Success Toast -->
+    <div class="success-toast" id="toast">
+        <i class="fas fa-check-circle" style="font-size: 1.5rem;"></i>
         <span>Application submitted successfully!</span>
     </div>
 
-<script>
-    // Simulate resume check from profile
-    const hasResume = localStorage.getItem('userResume') === 'true';
+    <script>
+        // Dropdown toggle
+        function toggleDropdown() {
+            const dropdown = document.getElementById('userDropdown');
+            dropdown.classList.toggle('active');
+        }
 
-    const resumeStatus = document.getElementById('resume-status');
-    const uploadArea = document.getElementById('resume-upload-area');
+        // Close dropdown when clicking outside
+        window.onclick = function(event) {
+            if (!event.target.matches('.user-icon-nav')) {
+                const dropdown = document.getElementById('userDropdown');
+                if (dropdown.classList.contains('active')) {
+                    dropdown.classList.remove('active');
+                }
+            }
+        }
 
-    if (hasResume) {
-        resumeStatus.innerHTML = `
-            <div class="status-icon status-success"><i class="fas fa-check"></i></div>
-            <span>Your resume is attached automatically</span>
-        `;
-        uploadArea.style.display = 'none';
-    } else {
-        resumeStatus.innerHTML = `
-            <div class="status-icon status-warning"><i class="fas fa-exclamation-triangle"></i></div>
-            <span>No resume found. Please upload or create one.</span>
-        `;
-        uploadArea.style.display = 'block';
-    }
+        // Show file name
+        function showFileName() {
+            const input = document.getElementById('resume-file');
+            const fileNameDiv = document.getElementById('file-name');
+            if (input.files.length > 0) {
+                fileNameDiv.textContent = '✓ ' + input.files[0].name;
+            }
+        }
 
-    // File input feedback
-    document.getElementById('resume-file').addEventListener('change', function() {
-        const fileName = this.files[0]?.name || 'No file chosen';
-        document.querySelector('.upload-text').textContent = fileName;
-    });
-
-    // Submit form
-    document.getElementById('apply-form').addEventListener('submit', function(e) {
-        e.preventDefault();
-        const toast = document.getElementById('toast');
-        toast.classList.add('show');
-
+        // Show success message if redirected with success
+        @if(session('success'))
+        document.getElementById('toast').classList.add('show');
         setTimeout(() => {
-            toast.classList.remove('show');
+            document.getElementById('toast').classList.remove('show');
         }, 3000);
-    });
-</script>
-
+        @endif
+    </script>
 </body>
 </html>

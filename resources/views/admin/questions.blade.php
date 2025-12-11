@@ -6,6 +6,7 @@
     <title>Edit Test Questions - Admin Panel</title>
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -41,7 +42,6 @@
             font-size: 1.4rem;
             font-weight: 700;
         }
-        .logo-icon { font-size: 2rem; }
         .logo-title {
             background: linear-gradient(90deg, #4fc3f7, #81d4fa);
             -webkit-background-clip: text;
@@ -87,7 +87,7 @@
             color: #0277bd; border-bottom: 2px solid #bbdefb;
             margin-bottom: 20px; display: flex; align-items: center; gap: 10px;
         }
-        .sidebar-header::before { content: "Shield"; font-size: 1.5rem; }
+        .sidebar-menu { list-style: none; }
         .sidebar-menu a {
             display: flex; align-items: center; gap: 14px;
             padding: 14px 30px; color: #0288d1; text-decoration: none;
@@ -114,7 +114,6 @@
             font-size: 2.3rem; font-weight: 700; color: #0277bd;
             display: flex; align-items: center; gap: 14px;
         }
-        .page-title::before { content: "Question Circle"; font-size: 2.5rem; }
 
         .controls {
             background: white; padding: 25px 40px; border-radius: 20px;
@@ -180,14 +179,6 @@
             padding: 12px; background: white; border-radius: 12px;
             border: 2px solid #90caf9;
         }
-        .option input[type="radio"] { margin: 0; }
-        .option label {
-            flex: 1; cursor: pointer; font-weight: 600; color: #0277bd;
-        }
-        .option input[type="text"] {
-            flex: 1; padding: 10px; border: 2px solid #90caf9;
-            border-radius: 10px; font-size: 1rem;
-        }
 
         /* Toast Notification */
         .toast {
@@ -199,7 +190,6 @@
             z-index: 10000; display: flex; align-items: center; gap: 12px;
         }
         .toast.show { opacity: 1; visibility: visible; bottom: 50px; }
-        .toast::before { content: "Checkmark Circle"; font-size: 1.5rem; }
 
         @media (max-width: 992px) {
             .main-layout { flex-direction: column; }
@@ -213,7 +203,6 @@
     <header>
         <div class="header-container">
             <div class="logo">
-                <span class="logo-icon">Cloud</span>
                 <span class="logo-title">CAREER PATH RECOMMENDER</span>
             </div>
             <div class="user-menu">
@@ -221,9 +210,14 @@
                     <i class="fas fa-user"></i>
                 </div>
                 <div class="dropdown" id="userDropdown">
-                    <a href="homepage.html"><i class="fas fa-home"></i> Homepage</a>
-                    <a href="admin-profile.html"><i class="fas fa-user-cog"></i> Admin Profile</a>
-                    <a href="#" class="logout"><i class="fas fa-sign-out-alt"></i> Log Out</a>
+                    <a href="{{ route('admin.dashboard') }}"><i class="fas fa-home"></i> Homepage</a>
+                    <a href="{{ route('admin.profile') }}"><i class="fas fa-user-cog"></i> Admin Profile</a>
+                    <form action="{{ route('logout') }}" method="POST" style="margin: 0;">
+                        @csrf
+                        <a href="#" onclick="event.preventDefault(); this.closest('form').submit();" class="logout">
+                            <i class="fas fa-sign-out-alt"></i> Log Out
+                        </a>
+                    </form>
                 </div>
             </div>
         </div>
@@ -233,19 +227,19 @@
     <div class="main-layout">
         <!-- SIDEBAR -->
         <aside class="sidebar">
-            <div class="sidebar-header">Admin Panel</div>
+            <div class="sidebar-header"><i class="fas fa-shield-alt"></i> Admin Panel</div>
             <ul class="sidebar-menu">
-                <li><a href="admin-dashboard.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
-                <li><a href="admin-users.html"><i class="fas fa-users"></i> Edit Users</a></li>
-                <li><a href="testquestionsmanagement.html" class="active"><i class="fas fa-question-circle"></i> Edit Test Questions</a></li>
-                <li><a href="admin-jobs.html"><i class="fas fa-briefcase"></i> Edit Jobs</a></li>
+                <li><a href="{{ route('admin.dashboard') }}"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                <li><a href="{{ route('admin.users') }}"><i class="fas fa-users"></i> Edit Users</a></li>
+                <li><a href="{{ route('admin.questions') }}" class="active"><i class="fas fa-question-circle"></i> Edit Test Questions</a></li>
+                <li><a href="{{ route('admin.jobs') }}"><i class="fas fa-briefcase"></i> Edit Jobs</a></li>
             </ul>
         </aside>
 
         <!-- CONTENT -->
         <main class="content">
             <div class="page-header">
-                <h1 class="page-title">Current Test Questions</h1>
+                <h1 class="page-title"><i class="fas fa-question-circle"></i> Current Test Questions</h1>
             </div>
 
             <div class="controls">
@@ -260,75 +254,28 @@
             <div class="questions-container">
                 <div class="section-title">Personality Quiz (Mini-MBTI)</div>
 
-                <div class="question-block" data-q="q1">
+                @foreach($questions as $question)
+                <div class="question-block" data-id="{{ $question->id }}">
                     <div class="question-text">
-                        <textarea readonly>Q1: In a group project, are you the one who...</textarea>
+                        <textarea readonly>{{ $question->question }}</textarea>
                     </div>
                     <div class="options">
+                        @foreach($question->options as $option)
                         <div class="option">
-                            <input type="radio" name="q1" value="E" disabled>
-                            <input type="text" value="A. Takes charge and talks a lot" readonly>
+                            <strong>{{ $option['value'] }}:</strong> {{ $option['text'] }}
                         </div>
-                        <div class="option">
-                            <input type="radio" name="q1" value="I" disabled>
-                            <input type="text" value="B. Listens and thinks before speaking" readonly>
-                        </div>
+                        @endforeach
                     </div>
                 </div>
-
-                <div class="question-block" data-q="q2">
-                    <div class="question-text">
-                        <textarea readonly>Q2: When solving problems, do you prefer...</textarea>
-                    </div>
-                    <div class="options">
-                        <div class="option">
-                            <input type="radio" name="q2" value="S" disabled>
-                            <input type="text" value="A. Practical solutions" readonly>
-                        </div>
-                        <div class="option">
-                            <input type="radio" name="q2" value="N" disabled>
-                            <input type="text" value="B. Creative ideas" readonly>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="question-block" data-q="q3">
-                    <div class="question-text">
-                        <textarea readonly>Q3: When making decisions, do you rely more on...</textarea>
-                    </div>
-                    <div class="options">
-                        <div class="option">
-                            <input type="radio" name="q3" value="T" disabled>
-                            <input type="text" value="A. Logic and facts" readonly>
-                        </div>
-                        <div class="option">
-                            <input type="radio" name="q3" value="F" disabled>
-                            <input type="text" value="B. Feelings and values" readonly>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="question-block" data-q="q4">
-                    <div class="question-text">
-                        <textarea readonly>Q4: Do you prefer your life to be...</textarea>
-                    </div>
-                    <div class="options">
-                        <div class="option">
-                            <input type="radio" name="q4" value="J" disabled>
-                            <input type="text" value="A. Organized and planned" readonly>
-                        </div>
-                        <div class="option">
-                            <input type="radio" name="q4" value="P" disabled>
-                            <input type="text" value="B. Flexible and spontaneous" readonly>
-                        </div>
-                    </div>
-                </div>
+                @endforeach
             </div>
         </main>
     </div>
 
     <!-- Toast -->
-    <div class="toast" id="toast">Done upload new question</div>
+    <div class="toast" id="toast">
+        <i class="fas fa-check-circle"></i> Questions updated successfully!
+    </div>
 
     <script>
         let isEditing = false;
@@ -340,15 +287,13 @@
 
             document.querySelectorAll('.question-block').forEach(block => {
                 block.classList.add('editable');
-                block.querySelectorAll('textarea, input[type="text"]').forEach(el => {
+                block.querySelectorAll('textarea').forEach(el => {
                     el.removeAttribute('readonly');
                     el.style.background = 'white';
                 });
-                block.querySelectorAll('input[type="radio"]').forEach(r => r.disabled = false);
             });
 
-            // Track changes
-            document.querySelectorAll('textarea, input[type="text"]').forEach(input => {
+            document.querySelectorAll('textarea').forEach(input => {
                 input.addEventListener('input', () => {
                     hasChanges = true;
                     document.getElementById('uploadBtn').classList.add('enabled');
@@ -356,28 +301,52 @@
                 });
             });
 
-            document.getElementById('editBtn').textContent = 'Editing Mode Active';
+            document.getElementById('editBtn').innerHTML = '<i class="fas fa-edit"></i> Editing Mode Active';
             document.getElementById('editBtn').style.opacity = '0.8';
         }
 
         function uploadChanges() {
             if (!hasChanges) return;
 
-            // Show toast
-            const toast = document.getElementById('toast');
-            toast.classList.add('show');
-            setTimeout(() => toast.classList.remove('show'), 3000);
+            const questions = [];
+            document.querySelectorAll('.question-block').forEach((block) => {
+                const id = block.getAttribute('data-id');
+                const textarea = block.querySelector('textarea');
+                questions.push({
+                    id: id,
+                    question: textarea.value
+                });
+            });
 
-            // Reset
-            hasChanges = false;
-            document.getElementById('uploadBtn').classList.remove('enabled');
-            document.getElementById('uploadBtn').disabled = true;
+            fetch('{{ route("admin.questions.update") }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                },
+                body: JSON.stringify({ questions: questions })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    const toast = document.getElementById('toast');
+                    toast.classList.add('show');
+                    setTimeout(() => {
+                        toast.classList.remove('show');
+                        location.reload();
+                    }, 2000);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error updating questions');
+            });
         }
 
-        // Dropdown
         function toggleDropdown() {
             document.getElementById('userDropdown').classList.toggle('show');
         }
+
         window.addEventListener('click', function(e) {
             if (!e.target.closest('.user-menu')) {
                 document.getElementById('userDropdown').classList.remove('show');

@@ -3,254 +3,51 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Browse Jobs - Career Path Recommender</title>
+    <title>CAREER PATH RECOMMENDER - Jobs</title>
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Quicksand', sans-serif;
-            background: #121826;
-            color: #e2e8f0;
+            background: #f8fafc;
+            color: #334155;
             line-height: 1.6;
             min-height: 100vh;
         }
-        .container { max-width: 1400px; margin: 0 auto; padding: 0 16px; }
+        .container { max-width: 1400px; margin: 0 auto; padding: 0 20px; }
 
-        /* Header */
-        header {
-            background: #0f172a;
-            padding: 14px 0;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-        .header-top {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 12px;
-        }
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-weight: 700;
-            font-size: 1.4rem;
-            color: #fff;
-        }
-        .logo img { height: 36px; border-radius: 8px; }
-        .logo .title {
-            background: linear-gradient(90deg, #fd79a8, #a29bfe);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            font-size: 1.3rem;
-        }
-        .search-bar {
-            flex: 1;
-            max-width: 500px;
-            display: flex;
-            background: #1e293b;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-        }
-        .search-bar input {
-            flex: 1;
-            padding: 12px 16px;
-            border: none;
-            background: transparent;
-            color: #fff;
-            font-size: 1rem;
-        }
-        .search-bar input::placeholder { color: #94a3b8; }
-        .search-bar button {
-            background: #10b981;
-            color: white;
-            border: none;
-            padding: 0 18px;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-        .search-bar button:hover { background: #059669; }
-
-        /* Nav Links */
-        .nav-links {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-        .nav-links a {
-            padding: 8px 16px;
-            border-radius: 10px;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 0.95rem;
-            color: #94a3b8;
-            transition: all 0.2s;
-        }
-        .nav-links a:hover {
-            background: #1e293b;
-            color: #e2e8f0;
-        }
-        .nav-links a.active {
-            background: #3b82f6;
-            color: white;
-        }
-
-        /* User Dropdown */
-        .user-menu {
-            position: relative;
-            display: inline-block;
-        }
-        .user-icon {
-            width: 40px;
-            height: 40px;
-            background: #fd79a8;
-            color: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.1rem;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-        .user-icon:hover { background: #f43f5e; }
-        .dropdown {
-            position: absolute;
-            top: 50px;
-            right: 0;
-            background: #1e293b;
-            border-radius: 12px;
-            min-width: 180px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
-            overflow: hidden;
-            opacity: 0;
-            visibility: hidden;
-            transform: translateY(-10px);
-            transition: all 0.3s ease;
-            z-index: 1000;
-        }
-        .dropdown.show {
-            opacity: 1;
-            visibility: visible;
-            transform: translateY(0);
-        }
-        .dropdown a {
-            display: block;
-            padding: 12px 16px;
-            color: #e2e8f0;
-            text-decoration: none;
-            font-size: 0.95rem;
-            transition: 0.2s;
-        }
-        .dropdown a:hover { background: #334155; }
-        .dropdown button {
-            background: none;
-            border: none;
-            color: #f87171;
-            cursor: pointer;
-            padding: 12px 16px;
-            width: 100%;
-            text-align: left;
-            font-family: inherit;
-            font-size: 0.95rem;
-            transition: 0.2s;
-        }
-        .dropdown button:hover { background: #334155; }
-
-        /* Main Content */
+        /* Main Content Adjustments */
         .main-content {
-            display: grid;
-            grid-template-columns: 280px 1fr;
-            gap: 24px;
-            margin-top: 20px;
-            padding-bottom: 40px;
+            margin-top: 30px;
+            padding-bottom: 60px;
         }
 
-        /* Filters */
-        .filters {
-            background: #1e293b;
-            border-radius: 16px;
-            padding: 20px;
-            height: fit-content;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-            position: sticky;
-            top: 80px;
-        }
-        .filter-title {
-            font-size: 1.2rem;
-            font-weight: 700;
-            color: #e2e8f0;
-            margin-bottom: 20px;
-        }
-        .filter-group {
-            margin-bottom: 20px;
-        }
-        .filter-group h3 {
-            font-size: 0.95rem;
-            margin-bottom: 10px;
-            color: #cbd5e1;
-            font-weight: 600;
-        }
-        .filter-group select, .filter-group input {
-            width: 100%;
-            padding: 10px 12px;
-            background: #0f172a;
-            border: 1px solid #334155;
-            border-radius: 10px;
-            color: #e2e8f0;
-            font-size: 0.95rem;
+        .results-info {
+            color: #64748b;
+            font-size: 1.1rem;
+            margin: 20px 0;
+            font-weight: 500;
         }
 
         /* Job List */
-        .job-list-section {
-            background: #1e293b;
-            border-radius: 16px;
-            padding: 24px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-        }
-        .results-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-            gap: 12px;
-        }
-        .results-info {
-            color: #94a3b8;
-            font-size: 0.95rem;
-        }
-        .sort-by select {
-            padding: 8px 12px;
-            background: #0f172a;
-            border: 1px solid #334155;
-            border-radius: 10px;
-            color: #e2e8f0;
-            font-size: 0.9rem;
-        }
-
         .job-list {
             display: flex;
             flex-direction: column;
-            gap: 16px;
+            gap: 20px;
         }
         .job-card {
-            background: #0f172a;
+            background: white;
             border-radius: 16px;
-            padding: 20px;
+            padding: 24px;
             transition: all 0.3s ease;
-            border: 1px solid #334155;
-            cursor: pointer;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
         }
         .job-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-            border-color: #10b981;
+            transform: translateY(-6px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            border-color: #667eea;
         }
         .job-header {
             display: flex;
@@ -259,248 +56,248 @@
             margin-bottom: 12px;
         }
         .job-title {
-            font-size: 1.25rem;
+            font-size: 1.4rem;
             font-weight: 700;
-            color: #e2e8f0;
+            color: #1e293b;
         }
         .company {
-            font-size: 0.95rem;
-            color: #94a3b8;
+            font-size: 1rem;
+            color: #64748b;
             display: flex;
             align-items: center;
-            gap: 6px;
-            margin-top: 4px;
+            gap: 8px;
+            margin-top: 6px;
         }
         .salary {
-            background: #064e3b;
-            color: #6ee7b7;
-            padding: 4px 10px;
-            border-radius: 8px;
-            font-size: 0.9rem;
+            background: #f0fdf4;
+            color: #16a34a;
+            padding: 6px 12px;
+            border-radius: 10px;
             font-weight: 600;
-            white-space: nowrap;
+            font-size: 0.95rem;
         }
         .job-meta {
             display: flex;
             flex-wrap: wrap;
-            gap: 12px;
-            font-size: 0.85rem;
-            color: #94a3b8;
-            margin: 12px 0;
+            gap: 16px;
+            margin: 16px 0;
+            color: #64748b;
+            font-size: 0.95rem;
         }
         .tag {
-            background: #334155;
-            padding: 4px 10px;
-            border-radius: 8px;
-            font-size: 0.8rem;
+            background: #e0e7ff;
+            color: #6366f1;
+            padding: 6px 12px;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            font-weight: 500;
         }
         .apply-btn {
-            background: linear-gradient(90deg, #10b981, #34d399);
+            background: linear-gradient(135deg, #667eea, #764ba2);
             color: white;
             border: none;
-            padding: 10px 20px;
+            padding: 12px 28px;
             border-radius: 12px;
             font-weight: 600;
             cursor: pointer;
-            font-size: 0.9rem;
-            transition: 0.2s;
+            font-size: 1rem;
+            transition: 0.3s;
+            text-decoration: none;
+            display: inline-block;
         }
         .apply-btn:hover {
             transform: scale(1.05);
+            box-shadow: 0 8px 20px rgba(102,126,234,0.4);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 100px 20px;
+            color: #94a3b8;
+        }
+        .empty-state i {
+            font-size: 5rem;
+            margin-bottom: 24px;
+            opacity: 0.4;
+        }
+        .empty-state h3 {
+            font-size: 1.8rem;
+            margin-bottom: 12px;
+            color: #334155;
         }
 
         /* Pagination */
         .pagination {
             display: flex;
             justify-content: center;
-            gap: 8px;
-            margin-top: 30px;
-            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 40px;
         }
         .pagination a, .pagination span {
-            padding: 10px 16px;
-            background: #0f172a;
-            border: 1px solid #334155;
-            border-radius: 10px;
-            color: #e2e8f0;
+            padding: 10px 18px;
+            background: white;
+            color: #64748b;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
             text-decoration: none;
-            font-weight: 600;
+            font-weight: 500;
             transition: 0.2s;
         }
         .pagination a:hover {
-            background: #10b981;
-            border-color: #10b981;
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
         }
         .pagination .active {
-            background: #10b981;
-            border-color: #10b981;
-        }
-        .pagination .disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
         }
 
         /* Responsive */
-        @media (max-width: 992px) {
-            .main-content { grid-template-columns: 1fr; }
-            .filters { position: static; }
-        }
         @media (max-width: 768px) {
-            .header-top { flex-direction: column; align-items: stretch; }
-            .search-bar { max-width: 100%; }
-            .nav-links { justify-content: center; margin-top: 12px; }
+            .search-form > div:first-child {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- Header -->
-    <header>
-        <div class="container">
-            <div class="header-top">
-                <div class="logo">
-                    <img src="https://via.placeholder.com/36?text=CP" alt="Logo">
-                    <span class="title">JOB PARTNER</span>
-                </div>
-                <div class="search-bar">
-                    <input type="text" placeholder="Search jobs, skills, companies...">
-                    <button><i class="fas fa-search"></i></button>
-                </div>
-                <div class="nav-links">
-                    <a href="{{ route('homepage') }}">Home</a>
-                    <a href="{{ route('jobs') }}" class="active">More Jobs</a>
-                    <a href="{{ route('test') }}">Test Now</a>
-                    <div class="user-menu">
-                        <div class="user-icon" onclick="toggleDropdown()">
-                            <i class="fas fa-user"></i>
-                        </div>
-                        <div class="dropdown" id="user-dropdown">
-                            <a href="{{ route('profile') }}"><i class="fas fa-user-circle"></i> My Profile</a>
-                            <form method="POST" action="{{ route('logout') }}" style="margin: 0;">
-                                @csrf
-                                <button type="submit"><i class="fas fa-sign-out-alt"></i> Log Out</button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
+
+{{-- NEW PURPLE GRADIENT HEADER --}}
+<header style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 18px 0; box-shadow: 0 4px 20px rgba(0,0,0,0.15); position: sticky; top: 0; z-index: 1000;">
+    < at the top of the file
+
+    <div style="max-width: 1400px; margin: 0 auto; padding: 0 30px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
+        <div style="display: flex; align-items: center; gap: 12px;">
+            <span style="font-size: 2rem;">💼</span>
+            <span style="font-size: 1.6rem; font-weight: 700; color: white;">CAREER PATH RECOMMENDER</span>
         </div>
-    </header>
-
-    <!-- Main Content -->
-    <div class="container">
-        <div class="main-content">
-            <!-- Filters Sidebar -->
-            <div class="filters">
-                <div class="filter-title">🔍 Filters</div>
-                
-                <form method="GET" action="{{ route('jobs') }}">
-                    <div class="filter-group">
-                        <h3>Job Type</h3>
-                        <select name="job_type">
-                            <option value="">All Types</option>
-                            <option value="full-time">Full Time</option>
-                            <option value="part-time">Part Time</option>
-                            <option value="contract">Contract</option>
-                            <option value="internship">Internship</option>
-                        </select>
-                    </div>
-
-                    <div class="filter-group">
-                        <h3>Location</h3>
-                        <input type="text" name="location" placeholder="e.g. Kuala Lumpur" value="{{ request('location') }}">
-                    </div>
-
-                    <button type="submit" style="width: 100%; padding: 10px; background: #10b981; color: white; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; margin-top: 10px;">
-                        Apply Filters
-                    </button>
-                </form>
-            </div>
-
-            <!-- Job List -->
-            <div class="job-list-section">
-                <div class="results-header">
-                    <div class="results-info">
-                        Showing <strong>{{ $jobs->count() }}</strong> of <strong>{{ $jobs->total() }}</strong> jobs
-                    </div>
-                    <div class="sort-by">
-                        <select onchange="window.location.href='?sort='+this.value">
-                            <option value="newest">Newest First</option>
-                            <option value="oldest">Oldest First</option>
-                        </select>
-                    </div>
+        
+        <div style="display: flex; align-items: center; gap: 20px;">
+            <a href="{{ route('homepage') }}" style="color: white; text-decoration: none; font-weight: 600; padding: 8px 16px; border-radius: 10px; transition: 0.2s;">Home</a>
+            <a href="{{ route('jobs') }}" style="color: white; text-decoration: none; font-weight: 600; padding: 8px 16px; border-radius: 10px; background: rgba(255,255,255,0.2);">More Jobs</a>
+            <a href="{{ route('test') }}" style="color: white; text-decoration: none; font-weight: 600; padding: 8px 16px; border-radius: 10px; transition: 0.2s;">Test Now</a>
+            
+            <div style="position: relative;" class="user-menu">
+                <div style="width: 45px; height: 45px; background: white; color: #667eea; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; cursor: pointer; font-size: 1.2rem;" onclick="toggleDropdown()">
+                    {{ auth()->check() ? strtoupper(substr(auth()->user()->name, 0, 1)) : 'U' }}
                 </div>
-
-                <div class="job-list">
-                    @forelse($jobs as $job)
-                        <div class="job-card" onclick="window.location.href='{{ route('apply') }}?id={{ $job->id }}'">
-                            <div class="job-header">
-                                <div>
-                                    <div class="job-title">{{ $job->title }}</div>
-                                    <div class="company"><i class="fas fa-building"></i> {{ $job->company }}</div>
-                                </div>
-                                @if($job->salary)
-                                    <span class="salary">{{ $job->salary }}</span>
-                                @endif
-                            </div>
-                            <div class="job-meta">
-                                <span><i class="fas fa-map-marker-alt"></i> {{ $job->location }}</span>
-                                <span class="tag">{{ ucfirst(str_replace('-', ' ', $job->job_type)) }}</span>
-                                @if($job->required_skills)
-                                    @foreach(array_slice($job->required_skills, 0, 3) as $skill)
-                                        <span class="tag">{{ $skill }}</span>
-                                    @endforeach
-                                @endif
-                            </div>
-                            <button class="apply-btn" onclick="event.stopPropagation(); window.location.href='{{ route('apply') }}?id={{ $job->id }}'">Apply Now</button>
-                        </div>
-                    @empty
-                        <div style="text-align: center; padding: 60px 20px;">
-                            <i class="fas fa-briefcase" style="font-size: 4rem; color: #334155; margin-bottom: 20px;"></i>
-                            <p style="font-size: 1.2rem; color: #94a3b8;">No jobs found. Try adjusting your filters!</p>
-                        </div>
-                    @endforelse
+                <div id="userDropdown" style="display: none; position: absolute; top: 55px; right: 0; background: white; min-width: 180px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); overflow: hidden; z-index: 1000;">
+                    <a href="{{ route('profile') }}" style="display: block; padding: 12px 20px; color: #667eea; text-decoration: none; font-weight: 600; transition: 0.2s;">👤 My Profile</a>
+                    <form action="{{ route('logout') }}" method="POST" style="margin: 0;">
+                        @csrf
+                        <button type="submit" style="width: 100%; text-align: left; padding: 12px 20px; background: none; border: none; color: #ef4444; font-weight: 600; cursor: pointer; border-top: 1px solid #f1f5f9;">🚪 Log Out</button>
+                    </form>
                 </div>
-
-                <!-- Pagination -->
-                @if($jobs->hasPages())
-                    <div class="pagination">
-                        {{-- Previous Page Link --}}
-                        @if ($jobs->onFirstPage())
-                            <span class="disabled">« Previous</span>
-                        @else
-                            <a href="{{ $jobs->previousPageUrl() }}">« Previous</a>
-                        @endif
-
-                        {{-- Pagination Elements --}}
-                        @foreach ($jobs->getUrlRange(1, $jobs->lastPage()) as $page => $url)
-                            @if ($page == $jobs->currentPage())
-                                <span class="active">{{ $page }}</span>
-                            @else
-                                <a href="{{ $url }}">{{ $page }}</a>
-                            @endif
-                        @endforeach
-
-                        {{-- Next Page Link --}}
-                        @if ($jobs->hasMorePages())
-                            <a href="{{ $jobs->nextPageUrl() }}">Next »</a>
-                        @else
-                            <span class="disabled">Next »</span>
-                        @endif
-                    </div>
-                @endif
             </div>
         </div>
     </div>
+</header>
 
-    <script>
-        function toggleDropdown() {
-            document.getElementById('user-dropdown').classList.toggle('show');
+<div class="container">
+    {{-- NEW SEARCH/FILTER FORM --}}
+    <form action="{{ route('jobs') }}" method="GET" class="search-form" style="background: white; padding: 30px; border-radius: 20px; margin-bottom: 30px; box-shadow: 0 10px 40px rgba(0,0,0,0.1);">
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; margin-bottom: 20px;">
+            <input type="text" name="search" placeholder="Search jobs, companies..." value="{{ request('search') }}" style="padding: 12px; border: 2px solid #e2e8f0; border-radius: 12px; font-size: 1rem;">
+            
+            <select name="job_type" style="padding: 12px; border: 2px solid #e2e8f0; border-radius: 12px;">
+                <option value="">All Types</option>
+                <option value="Full Time" {{ request('job_type') == 'Full Time' ? 'selected' : '' }}>Full Time</option>
+                <option value="Part Time" {{ request('job_type') == 'Part Time' ? 'selected' : '' }}>Part Time</option>
+                <option value="Contract" {{ request('job_type') == 'Contract' ? 'selected' : '' }}>Contract</option>
+                <option value="Internship" {{ request('job_type') == 'Internship' ? 'selected' : '' }}>Internship</option>
+            </select>
+            
+            <select name="date_posted" style="padding: 12px; border: 2px solid #e2e8f0; border-radius: 12px;">
+                <option value="">Any Time</option>
+                <option value="today" {{ request('date_posted') == 'today' ? 'selected' : '' }}>Today</option>
+                <option value="week" {{ request('date_posted') == 'week' ? 'selected' : '' }}>This Week</option>
+                <option value="month" {{ request('date_posted') == 'month' ? 'selected' : '' }}>This Month</option>
+            </select>
+        </div>
+        
+        <div style="display: flex; gap: 12px;">
+            <button type="submit" style="flex: 1; padding: 14px; background: linear-gradient(135deg, #667eea, #764ba2); color: white; border: none; border-radius: 12px; font-weight: 600; cursor: pointer;">🔍 Search Jobs</button>
+            <a href="{{ route('jobs') }}" style="padding: 14px 30px; background: #f1f5f9; color: #64748b; border-radius: 12px; text-decoration: none; font-weight: 600; display: inline-block; text-align: center;">Clear Filters</a>
+        </div>
+    </form>
+
+    <div class="results-info">
+        Showing <strong>{{ $jobs->total() }}</strong> job results
+    </div>
+
+    <div class="main-content">
+        <div class="job-list">
+            @forelse($jobs as $job)
+            <div class="job-card">
+                <div class="job-header">
+                    <div>
+                        <div class="job-title">{{ $job->title }}</div>
+                        <div class="company"><i class="fas fa-building"></i> {{ $job->company }}</div>
+                    </div>
+                    <span class="salary">
+                        @if($job->salary_min && $job->salary_max)
+                            MYR {{ number_format($job->salary_min) }} - {{ number_format($job->salary_max) }}
+                        @else
+                            Salary Negotiable
+                        @endif
+                    </span>
+                </div>
+                <div class="job-meta">
+                    <span><i class="fas fa-map-marker-alt"></i> {{ $job->location }}</span>
+                    <span class="tag">{{ $job->job_type }}</span>
+                </div>
+                <a href="{{ route('apply.show', ['job_id' => $job->id]) }}" class="apply-btn">Apply Now</a>
+            </div>
+            @empty
+            <div class="empty-state">
+                <i class="fas fa-briefcase"></i>
+                <h3>No Jobs Available</h3>
+                <p>Check back later for new opportunities!</p>
+            </div>
+            @endforelse
+        </div>
+    </div>
+
+    <!-- Pagination -->
+    @if($jobs->hasPages())
+    <div class="pagination">
+        @if($jobs->onFirstPage())
+            <span>&laquo; Previous</span>
+        @else
+            <a href="{{ $jobs->previousPageUrl() }}">&laquo; Previous</a>
+        @endif
+
+        @foreach(range(1, $jobs->lastPage()) as $page)
+            @if($page == $jobs->currentPage())
+                <span class="active">{{ $page }}</span>
+            @else
+                <a href="{{ $jobs->url($page) }}">{{ $page }}</a>
+            @endif
+        @endforeach
+
+        @if($jobs->hasMorePages())
+            <a href="{{ $jobs->nextPageUrl() }}">Next &raquo;</a>
+        @else
+            <span>Next &raquo;</span>
+        @endif
+    </div>
+    @endif
+</div>
+
+<script>
+    function toggleDropdown() {
+        const dropdown = document.getElementById('userDropdown');
+        dropdown.style.display = dropdown.style.display === 'none' ? 'block' : 'none';
+    }
+
+    window.addEventListener('click', function(e) {
+        if (!e.target.closest('.user-menu')) {
+            const dropdown = document.getElementById('userDropdown');
+            if (dropdown) dropdown.style.display = 'none';
         }
-        window.addEventListener('click', function(e) {
-            if (!e.target.closest('.user-menu')) {
-                document.getElementById('user-dropdown').classList.remove('show');
-            }
-        });
-    </script>
+    });
+</script>
 </body>
 </html>

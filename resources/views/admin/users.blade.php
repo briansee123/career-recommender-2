@@ -6,6 +6,7 @@
     <title>User Management - Admin Panel</title>
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -17,7 +18,7 @@
             flex-direction: column;
         }
 
-        /* ====================== HEADER ====================== */
+        /* HEADER */
         header {
             background: #0f172a;
             padding: 14px 0;
@@ -33,8 +34,6 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            flex-wrap: wrap;
-            gap: 12px;
         }
         .logo {
             display: flex;
@@ -44,34 +43,10 @@
             font-size: 1.4rem;
             color: #fff;
         }
-        .logo img { height: 36px; border-radius: 8px; }
         .logo .title {
             background: linear-gradient(90deg, #3b82f6, #8b5cf6);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-        }
-
-        .nav-links {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-        .nav-links a {
-            padding: 8px 16px;
-            border-radius: 10px;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 0.95rem;
-            color: #94a3b8;
-            transition: all 0.2s;
-        }
-        .nav-links a:hover {
-            background: #1e293b;
-            color: #e2e8f0;
-        }
-        .nav-links a.active {
-            background: #3b82f6;
-            color: white;
         }
 
         .user-menu {
@@ -123,14 +98,14 @@
         .dropdown a:hover { background: #334155; }
         .dropdown a.logout { color: #f87171; border-top: 1px solid #334155; }
 
-        /* ====================== MAIN LAYOUT ====================== */
+        /* MAIN LAYOUT */
         .main-layout {
             display: flex;
             flex: 1;
             overflow: hidden;
         }
 
-        /* ====================== SIDEBAR ====================== */
+        /* SIDEBAR */
         .sidebar {
             width: 260px;
             background: #1e40af;
@@ -176,7 +151,7 @@
             font-size: 1.1rem;
         }
 
-        /* ====================== CONTENT ====================== */
+        /* CONTENT */
         .content {
             flex: 1;
             padding: 32px;
@@ -226,12 +201,7 @@
             color: #64748b;
         }
 
-        /* ====================== DROPDOWN: Add User / Add Admin ====================== */
-        .dropdown-menu {
-            position: relative;
-            display: inline-block;
-        }
-        .dropdown-toggle {
+        .add-btn {
             background: #3b82f6;
             color: white;
             border: none;
@@ -244,41 +214,11 @@
             gap: 8px;
             transition: 0.2s;
         }
-        .dropdown-toggle:hover {
+        .add-btn:hover {
             background: #2563eb;
         }
-        .dropdown-content {
-            display: none;
-            position: absolute;
-            top: 100%;
-            right: 0;
-            background: white;
-            min-width: 180px;
-            border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-            overflow: hidden;
-            z-index: 1000;
-            margin-top: 6px;
-        }
-        .dropdown-content a {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 12px 16px;
-            color: #334155;
-            text-decoration: none;
-            font-weight: 500;
-            transition: 0.2s;
-        }
-        .dropdown-content a:hover {
-            background: #dbeafe;
-            color: #1d4ed8;
-        }
-        .dropdown-menu:hover .dropdown-content {
-            display: block;
-        }
 
-        /* ====================== TABLE ====================== */
+        /* TABLE */
         .table-container {
             background: white;
             border-radius: 16px;
@@ -300,8 +240,6 @@
             font-size: 0.95rem;
             border-bottom: 1px solid #e2e8f0;
         }
-        th:first-child { width: 60px; }
-        th:last-child { text-align: center; }
         td {
             padding: 16px 20px;
             border-bottom: 1px solid #f1f5f9;
@@ -316,13 +254,13 @@
             width: 40px;
             height: 40px;
             border-radius: 50%;
-            overflow: hidden;
-            border: 2px solid #e2e8f0;
-        }
-        .user-avatar img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 1rem;
         }
         .user-name {
             font-weight: 600;
@@ -344,7 +282,6 @@
         }
         .status.active { background: #dcfce7; color: #166534; }
         .status.inactive { background: #fef3c7; color: #713f12; }
-        .status.suspended { background: #fee2e2; color: #991b1b; }
 
         .action-btn {
             background: none;
@@ -355,29 +292,120 @@
             border-radius: 6px;
             transition: 0.2s;
         }
-        .action-btn.edit { color: #3b82f6; }
-        .action-btn.edit:hover { background: #dbeafe; }
         .action-btn.delete { color: #ef4444; }
         .action-btn.delete:hover { background: #fee2e2; }
-        .action-btn.ban { color: #f59e0b; }
-        .action-btn.ban:hover { background: #fef3c7; }
+
+        /* MODAL */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(5px);
+        }
+        .modal.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+        .modal-header h2 {
+            color: #1e293b;
+            font-size: 1.5rem;
+        }
+        .close {
+            color: #aaa;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .close:hover {
+            color: #3b82f6;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #475569;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1.5px solid #cbd5e1;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        .form-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            margin-top: 25px;
+        }
+        .btn-submit, .btn-cancel {
+            padding: 12px 30px;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .btn-submit {
+            background: #3b82f6;
+            color: white;
+            border: none;
+        }
+        .btn-submit:hover {
+            background: #2563eb;
+        }
+        .btn-cancel {
+            background: #f1f5f9;
+            color: #475569;
+            border: 1px solid #cbd5e1;
+        }
+        .btn-cancel:hover {
+            background: #e2e8f0;
+        }
 
         /* Pagination */
         .pagination {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
+            justify-content: center;
+            gap: 8px;
             padding: 20px;
             background: white;
             border-top: 1px solid #e2e8f0;
-            font-size: 0.95rem;
-            color: #64748b;
         }
-        .pagination-links {
-            display: flex;
-            gap: 6px;
-        }
-        .pagination-links a {
+        .pagination a, .pagination span {
             padding: 8px 12px;
             border: 1px solid #cbd5e1;
             border-radius: 8px;
@@ -386,81 +414,61 @@
             font-weight: 600;
             transition: 0.2s;
         }
-        .pagination-links a:hover {
+        .pagination a:hover {
             background: #3b82f6;
             color: white;
             border-color: #3b82f6;
         }
-        .pagination-links a.active {
+        .pagination .active {
             background: #3b82f6;
             color: white;
             border-color: #3b82f6;
         }
 
-        /* Responsive */
         @media (max-width: 992px) {
             .main-layout { flex-direction: column; }
-            .sidebar { width: 100%; padding: 16px 0; }
-            .page-header { flex-direction: column; align-items: stretch; }
-            .search-add { width: 100%; }
-            .search-box input { width: 100%; }
-        }
-        @media (max-width: 768px) {
-            table, thead, tbody, th, td, tr { display: block; }
-            thead tr { position: absolute; top: -9999px; left: -9999px; }
-            tr { border: 1px solid #e2e8f0; border-radius: 12px; margin-bottom: 12px; padding: 12px; }
-            td { border: none; position: relative; padding-left: 50%; }
-            td::before {
-                content: attr(data-label);
-                position: absolute;
-                left: 16px;
-                width: 45%;
-                font-weight: 600;
-                color: #475569;
-            }
-            .action-cell { text-align: right; padding-left: 16px; }
+            .sidebar { width: 100%; }
         }
     </style>
 </head>
 <body>
 
-    <!-- ====================== HEADER ====================== -->
+    <!-- HEADER -->
     <header>
         <div class="header-container">
             <div class="logo">
-                <img src="https://via.placeholder.com/36?text=CP" alt="Logo">
                 <span class="title">CAREER PATH RECOMMENDER</span>
             </div>
-            <div class="nav-links">
-                <a href="admin-homepage.html">Home</a>
-                <a href="test.html">Test Now</a>
-                <div class="user-menu">
-                    <div class="user-icon" onclick="toggleDropdown()">
-                        Admin
-                    </div>
-                    <div class="dropdown" id="user-dropdown">
-                        <a href="profile.html">My Profile</a>
-                        <a href="#" class="logout">Log Out</a>
-                    </div>
+            <div class="user-menu">
+                <div class="user-icon" onclick="toggleDropdown()">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div class="dropdown" id="user-dropdown">
+                    <a href="{{ route('admin.dashboard') }}">Homepage</a>
+                    <a href="{{ route('admin.profile') }}">My Profile</a>
+                    <form action="{{ route('logout') }}" method="POST" style="margin: 0;">
+                        @csrf
+                        <a href="#" onclick="event.preventDefault(); this.closest('form').submit();" class="logout">Log Out</a>
+                    </form>
                 </div>
             </div>
         </div>
     </header>
 
-    <!-- ====================== MAIN LAYOUT ====================== -->
+    <!-- MAIN LAYOUT -->
     <div class="main-layout">
-        <!-- ====================== SIDEBAR ====================== -->
+        <!-- SIDEBAR -->
         <aside class="sidebar">
             <div class="sidebar-header">Admin Panel</div>
             <ul class="sidebar-menu">
-                <li><a href="admin-homepage.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
-                <li><a href="usermanagement.html" class="active"><i class="fas fa-users"></i> Edit Users</a></li>
-                <li><a href="admin-questions.html"><i class="fas fa-question-circle"></i> Edit Test Questions</a></li>
-                <li><a href="admin-jobs.html"><i class="fas fa-briefcase"></i> Edit Jobs</a></li>
+                <li><a href="{{ route('admin.dashboard') }}"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                <li><a href="{{ route('admin.users') }}" class="active"><i class="fas fa-users"></i> Edit Users</a></li>
+                <li><a href="{{ route('admin.questions') }}"><i class="fas fa-question-circle"></i> Edit Test Questions</a></li>
+                <li><a href="{{ route('admin.jobs') }}"><i class="fas fa-briefcase"></i> Edit Jobs</a></li>
             </ul>
         </aside>
 
-        <!-- ====================== CONTENT ====================== -->
+        <!-- CONTENT -->
         <main class="content">
             <div class="page-header">
                 <h1 class="page-title">User Management</h1>
@@ -469,21 +477,9 @@
                         <i class="fas fa-search"></i>
                         <input type="text" placeholder="Search users..." id="search-input">
                     </div>
-
-                    <!-- DROPDOWN: Add User / Add Admin -->
-                    <div class="dropdown-menu">
-                        <button class="dropdown-toggle">
-                            <i class="fas fa-plus"></i> Add New <i class="fas fa-caret-down"></i>
-                        </button>
-                        <div class="dropdown-content">
-                            <a href="#" onclick="alert('Opening Add User Form...')">
-                                <i class="fas fa-user"></i> Add User
-                            </a>
-                            <a href="#" onclick="alert('Opening Add Admin Form...')">
-                                <i class="fas fa-user-shield"></i> Add Admin
-                            </a>
-                        </div>
-                    </div>
+                    <button class="add-btn" onclick="openAddModal()">
+                        <i class="fas fa-plus"></i> Add New User
+                    </button>
                 </div>
             </div>
 
@@ -500,132 +496,146 @@
                         </tr>
                     </thead>
                     <tbody>
+                        @foreach($users as $index => $user)
                         <tr>
-                            <td>1</td>
+                            <td>{{ $users->firstItem() + $index }}</td>
                             <td class="user-cell">
                                 <div class="user-avatar">
-                                    <img src="https://i.pravatar.cc/150?img=1" alt="Andrew">
+                                    {{ strtoupper(substr($user->name, 0, 1)) }}
                                 </div>
                                 <div>
-                                    <div class="user-name">Andrew Mike</div>
-                                    <div class="user-email">andrew@admin.com</div>
+                                    <div class="user-name">{{ $user->name }}</div>
+                                    <div class="user-email">{{ $user->email }}</div>
                                 </div>
                             </td>
-                            <td>04/10/2014</td>
-                            <td>Admin</td>
-                            <td><span class="status active">Active</span></td>
+                            <td>{{ $user->created_at->format('d/m/Y') }}</td>
+                            <td>{{ $user->is_admin ? 'Admin' : 'User' }}</td>
+                            <td><span class="status {{ $user->status }}">{{ ucfirst($user->status) }}</span></td>
                             <td class="action-cell">
-                                <button class="action-btn edit" title="Edit"><i class="fas fa-edit"></i></button>
-                                <button class="action-btn delete" title="Delete"><i class="fas fa-trash"></i></button>
+                                <button class="action-btn delete" onclick="deleteUser({{ $user->id }})" title="Delete">
+                                    <i class="fas fa-trash"></i>
+                                </button>
                             </td>
                         </tr>
-                        <tr>
-                            <td>2</td>
-                            <td class="user-cell">
-                                <div class="user-avatar">
-                                    <img src="https://i.pravatar.cc/150?img=2" alt="John">
-                                </div>
-                                <div>
-                                    <div class="user-name">John Doe</div>
-                                    <div class="user-email">john@publisher.com</div>
-                                </div>
-                            </td>
-                            <td>06/09/2015</td>
-                            <td>Publisher</td>
-                            <td><span class="status active">Active</span></td>
-                            <td class="action-cell">
-                                <button class="action-btn edit" title="Edit"><i class="fas fa-edit"></i></button>
-                                <button class="action-btn ban" title="Suspend"><i class="fas fa-ban"></i></button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>3</td>
-                            <td class="user-cell">
-                                <div class="user-avatar">
-                                    <img src="https://i.pravatar.cc/150?img=3" alt="Michael">
-                                </div>
-                                <div>
-                                    <div class="user-name">Micheal Holz</div>
-                                    <div class="user-email">micheal@pub.com</div>
-                                </div>
-                            </td>
-                            <td>09/05/2016</td>
-                            <td>Publisher</td>
-                            <td><span class="status inactive">Inactive</span></td>
-                            <td class="action-cell">
-                                <button class="action-btn edit" title="Edit"><i class="fas fa-edit"></i></button>
-                                <button class="action-btn delete" title="Delete"><i class="fas fa-trash"></i></button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>4</td>
-                            <td class="user-cell">
-                                <div class="user-avatar">
-                                    <img src="https://i.pravatar.cc/150?img=4" alt="Alex">
-                                </div>
-                                <div>
-                                    <div class="user-name">Alex Mike</div>
-                                    <div class="user-email">alex@reviewer.com</div>
-                                </div>
-                            </td>
-                            <td>11/09/2018</td>
-                            <td>Reviewer</td>
-                            <td><span class="status suspended">Suspended</span></td>
-                            <td class="action-cell">
-                                <button class="action-btn edit" title="Edit"><i class="fas fa-edit"></i></button>
-                                <button class="action-btn ban" title="Reactivate"><i class="fas fa-undo"></i></button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>5</td>
-                            <td class="user-cell">
-                                <div class="user-avatar">
-                                    <img src="https://i.pravatar.cc/150?img=5" alt="Paula">
-                                </div>
-                                <div>
-                                    <div class="user-name">Paula Wilson</div>
-                                    <div class="user-email">paula@reviewer.com</div>
-                                </div>
-                            </td>
-                            <td>09/09/2019</td>
-                            <td>Reviewer</td>
-                            <td><span class="status active">Active</span></td>
-                            <td class="action-cell">
-                                <button class="action-btn edit" title="Edit"><i class="fas fa-edit"></i></button>
-                                <button class="action-btn delete" title="Delete"><i class="fas fa-trash"></i></button>
-                            </td>
-                        </tr>
+                        @endforeach
                     </tbody>
                 </table>
 
                 <div class="pagination">
-                    <div>Showing 5 out of 25 entries</div>
-                    <div class="pagination-links">
-                        <a href="#">Previous</a>
-                        <a href="#">1</a>
-                        <a href="#" class="active">2</a>
-                        <a href="#">3</a>
-                        <a href="#">4</a>
-                        <a href="#">5</a>
-                        <a href="#">Next</a>
-                    </div>
+                    {{ $users->links('pagination::simple-default') }}
                 </div>
             </div>
         </main>
     </div>
 
+    <!-- ADD USER MODAL -->
+    <div id="addModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Add New User</h2>
+                <span class="close" onclick="closeModal()">&times;</span>
+            </div>
+            <form id="addUserForm">
+                @csrf
+                <div class="form-group">
+                    <label>Name</label>
+                    <input type="text" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" name="password" required>
+                </div>
+                <div class="form-group">
+                    <label>Role</label>
+                    <select name="is_admin" required>
+                        <option value="0">User</option>
+                        <option value="1">Admin</option>
+                    </select>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn-cancel" onclick="closeModal()">Cancel</button>
+                    <button type="submit" class="btn-submit">Add User</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <script>
-        // Toggle User Dropdown
         function toggleDropdown() {
             document.getElementById('user-dropdown').classList.toggle('show');
         }
+
         window.addEventListener('click', function(e) {
             if (!e.target.closest('.user-menu')) {
                 document.getElementById('user-dropdown').classList.remove('show');
             }
         });
 
-        // Search filter
+        function openAddModal() {
+            document.getElementById('addModal').classList.add('show');
+        }
+
+        function closeModal() {
+            document.getElementById('addModal').classList.remove('show');
+        }
+
+        // Add User
+        document.getElementById('addUserForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            
+            fetch('{{ route("admin.users.create") }}', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('User created successfully!');
+                    location.reload();
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error creating user');
+            });
+        });
+
+        // Delete User
+        function deleteUser(id) {
+            if (!confirm('Are you sure you want to delete this user?')) return;
+            
+            fetch(`/admin/users/${id}`, {
+                method: 'DELETE',
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert(data.message);
+                    location.reload();
+                } else {
+                    alert(data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error deleting user');
+            });
+        }
+
+        // Search
         document.getElementById('search-input').addEventListener('input', function() {
             const query = this.value.toLowerCase();
             document.querySelectorAll('tbody tr').forEach(row => {

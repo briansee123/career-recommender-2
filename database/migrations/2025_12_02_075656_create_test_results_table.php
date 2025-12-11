@@ -6,21 +6,32 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
+    /**
+     * Run the migrations.
+     */
     public function up(): void
     {
         Schema::create('test_results', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->string('mbti_type', 4); // e.g., INTJ, ENFP
-            $table->text('recommended_careers');
-            $table->text('skills')->nullable();
-            $table->text('interests')->nullable();
-            $table->string('academic_background')->nullable();
-            $table->json('answers')->nullable(); // Store all answers
+            $table->string('mbti_type', 10); // ENFP, INTJ, etc.
+            $table->text('skills'); // Comma-separated skills
+            $table->text('interests'); // User interests
+            $table->string('academic_background', 100); // Engineering, Business, etc.
+            $table->json('personality_answers'); // Store MBTI quiz answers
+            $table->text('ai_recommendations'); // AI-generated career recommendations
             $table->timestamps();
+            
+            // Indexes for faster queries
+            $table->index('user_id');
+            $table->index('mbti_type');
+            $table->index('created_at');
         });
     }
 
+    /**
+     * Reverse the migrations.
+     */
     public function down(): void
     {
         Schema::dropIfExists('test_results');

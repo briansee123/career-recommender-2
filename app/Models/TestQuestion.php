@@ -12,13 +12,28 @@ class TestQuestion extends Model
     protected $fillable = [
         'question',
         'options',
-        'mbti_type',
         'order',
-        'is_active'
+        'is_active',
     ];
 
     protected $casts = [
         'options' => 'array',
-        'is_active' => 'boolean'
+        'is_active' => 'boolean',
     ];
+
+    /**
+     * Scope to get only active questions
+     */
+    public function scopeActive($query)
+    {
+        return $query->where('is_active', true);
+    }
+
+    /**
+     * Scope to get questions in order
+     */
+    public function scopeOrdered($query)
+    {
+        return $query->orderBy('order', 'asc');
+    }
 }
