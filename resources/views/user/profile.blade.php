@@ -635,35 +635,115 @@
         </div>
 
         <!-- Resume Section -->
-        <div class="resume-section">
-            <h2 class="section-title">📄 Resume</h2>
-            
-            @if(auth()->user()->resume_path)
-            <div style="background: #e8f5e9; padding: 20px; border-radius: 12px; margin-bottom: 20px;">
-                <i class="fas fa-check-circle" style="color: #4caf50; margin-right: 8px;"></i>
-                <strong>Resume uploaded:</strong> {{ basename(auth()->user()->resume_path) }}
-                <a href="{{ asset('storage/' . auth()->user()->resume_path) }}" target="_blank" style="margin-left: 15px; color: #1976d2;">
-                    <i class="fas fa-download"></i> Download
-                </a>
-            </div>
-            @endif
-            
-            <form action="{{ route('profile.uploadResume') }}" method="POST" enctype="multipart/form-data" id="resume-form">
-                @csrf
-                <div class="resume-upload-area" onclick="document.getElementById('resume-file').click()">
-                    <input type="file" id="resume-file" name="resume" accept=".pdf,.doc,.docx" style="display: none;" onchange="document.getElementById('resume-form').submit()">
-                    <div style="font-size: 3rem; margin-bottom: 10px;">📁</div>
-                    <div style="font-size: 1.2rem; font-weight: 600; margin-bottom: 10px;">Click to upload your resume</div>
-                    <div style="color: #666;">Supported formats: PDF, DOC, DOCX (Max 5MB)</div>
+<div class="resume-section">
+    <h2 class="section-title">📄 Resume</h2>
+    
+    @if(auth()->user()->resume)
+        <div style="background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); padding: 25px; border-radius: 15px; margin-bottom: 20px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                <div>
+                    <h3 style="color: #667eea; font-size: 1.3rem; margin-bottom: 5px;">
+                        {{ auth()->user()->resume->job_title }}
+                    </h3>
+                    <p style="color: #666; font-size: 0.95rem;">
+                        Last updated: {{ auth()->user()->resume->updated_at->format('M d, Y') }}
+                    </p>
                 </div>
-            </form>
+                <div>
+                    <a href="{{ route('buildresume') }}" style="background: #667eea; color: white; padding: 10px 20px; border-radius: 10px; text-decoration: none; font-weight: 600; display: inline-block; margin-right: 10px;">
+                        ✏️ Edit Resume
+                    </a>
+                    <button onclick="alert('Download feature coming soon!')" style="background: #10b981; color: white; padding: 10px 20px; border-radius: 10px; border: none; font-weight: 600; cursor: pointer;">
+                        📥 Download PDF
+                    </button>
+                </div>
+            </div>
             
-            <div style="text-align: center; margin-top: 20px;">
-                <a href="{{ route('buildresume') }}" style="color: #3b82f6; font-weight: 600; text-decoration: none;">
-                    <i class="fas fa-magic"></i> Or build one with our AI Resume Builder
-                </a>
+            <!-- Resume Preview -->
+            <div style="background: white; padding: 20px; border-radius: 12px;">
+                <div style="border-bottom: 2px solid #667eea; padding-bottom: 10px; margin-bottom: 15px;">
+                    <h4 style="color: #333; font-size: 1.1rem;">Personal Information</h4>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; font-size: 0.9rem;">
+                    <div>
+                        <strong>Name:</strong> {{ auth()->user()->resume->first_name }} {{ auth()->user()->resume->last_name }}
+                    </div>
+                    <div>
+                        <strong>Email:</strong> {{ auth()->user()->resume->email }}
+                    </div>
+                    <div>
+                        <strong>Phone:</strong> {{ auth()->user()->resume->phone ?? 'Not provided' }}
+                    </div>
+                    <div>
+                        <strong>Location:</strong> {{ auth()->user()->resume->city ?? 'Not provided' }}, {{ auth()->user()->resume->country ?? 'Malaysia' }}
+                    </div>
+                </div>
+                
+                @if(auth()->user()->resume->summary)
+                <div style="margin-top: 20px;">
+                    <div style="border-bottom: 2px solid #667eea; padding-bottom: 10px; margin-bottom: 15px;">
+                        <h4 style="color: #333; font-size: 1.1rem;">Professional Summary</h4>
+                    </div>
+                    <p style="color: #555; line-height: 1.6;">{{ auth()->user()->resume->summary }}</p>
+                </div>
+                @endif
+                
+                @if(auth()->user()->resume->experience_company)
+                <div style="margin-top: 20px;">
+                    <div style="border-bottom: 2px solid #667eea; padding-bottom: 10px; margin-bottom: 15px;">
+                        <h4 style="color: #333; font-size: 1.1rem;">Work Experience</h4>
+                    </div>
+                    <div>
+                        <strong style="color: #667eea;">{{ auth()->user()->resume->experience_title }}</strong>
+                        <div style="color: #666; font-size: 0.9rem; margin: 5px 0;">
+                            {{ auth()->user()->resume->experience_company }} | {{ auth()->user()->resume->experience_duration }}
+                        </div>
+                        <p style="color: #555; margin-top: 8px;">{{ auth()->user()->resume->experience_description }}</p>
+                    </div>
+                </div>
+                @endif
+                
+                @if(auth()->user()->resume->education_institution)
+                <div style="margin-top: 20px;">
+                    <div style="border-bottom: 2px solid #667eea; padding-bottom: 10px; margin-bottom: 15px;">
+                        <h4 style="color: #333; font-size: 1.1rem;">Education</h4>
+                    </div>
+                    <div>
+                        <strong style="color: #667eea;">{{ auth()->user()->resume->education_degree }}</strong>
+                        <div style="color: #666; font-size: 0.9rem; margin: 5px 0;">
+                            {{ auth()->user()->resume->education_institution }} | {{ auth()->user()->resume->education_year }}
+                        </div>
+                    </div>
+                </div>
+                @endif
+                
+                @if(auth()->user()->resume->skills)
+                <div style="margin-top: 20px;">
+                    <div style="border-bottom: 2px solid #667eea; padding-bottom: 10px; margin-bottom: 15px;">
+                        <h4 style="color: #333; font-size: 1.1rem;">Skills</h4>
+                    </div>
+                    <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+                        @foreach(explode(',', auth()->user()->resume->skills) as $skill)
+                            <span style="background: #667eea; color: white; padding: 6px 14px; border-radius: 20px; font-size: 0.85rem; font-weight: 600;">
+                                {{ trim($skill) }}
+                            </span>
+                        @endforeach
+                    </div>
+                </div>
+                @endif
             </div>
         </div>
+    @else
+        <div class="resume-options">
+            <p style="text-align: center; color: #666; margin-bottom: 20px; font-size: 1.1rem;">
+                You haven't created a resume yet. Build one now to apply for jobs!
+            </p>
+            <a href="{{ route('buildresume') }}" style="display: block; text-align: center; background: linear-gradient(135deg, #667eea, #764ba2); color: white; padding: 15px 30px; border-radius: 15px; text-decoration: none; font-weight: 600; font-size: 1.1rem;">
+                🛠️ Build Your Resume Now
+            </a>
+        </div>
+    @endif
+</div>
 
         <!-- Test Results Section -->
         <div class="test-results">

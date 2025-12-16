@@ -411,15 +411,19 @@
                     <form id="resume-form" action="{{ route('resume.save') }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         
+                        @php
+                            $resume = auth()->user()->resume;
+                        @endphp
+
                         <div class="input-row">
                             <div class="input-group">
                                 <label>Job Title *</label>
-                                <input type="text" name="job_title" id="job-title" placeholder="e.g. Software Engineer" required value="{{ auth()->user()->resume->job_title ?? '' }}">
+                                <input type="text" name="job_title" id="job-title" placeholder="e.g. Software Engineer" required value="{{ $resume->job_title ?? '' }}">
                             </div>
                             <div class="photo-upload">
                                 <div class="photo-preview" id="photo-preview">
-                                    @if(auth()->user()->resume && auth()->user()->resume->photo)
-                                        <img src="{{ Storage::url(auth()->user()->resume->photo) }}" alt="Profile">
+                                    @if($resume && $resume->photo)
+                                        <img src="{{ Storage::url($resume->photo) }}" alt="Profile">
                                     @else
                                         <span style="font-size:2rem; color:#94a3b8;">👤</span>
                                     @endif
@@ -432,34 +436,34 @@
                         <div class="input-row">
                             <div class="input-group">
                                 <label>First Name *</label>
-                                <input type="text" name="first_name" id="first-name" placeholder="e.g. Sarah" required value="{{ explode(' ', auth()->user()->name)[0] ?? '' }}">
+                                <input type="text" name="first_name" id="first-name" placeholder="e.g. Sarah" required value="{{ $resume->first_name ?? explode(' ', auth()->user()->name)[0] ?? '' }}">
                             </div>
                             <div class="input-group">
-                                <label>Last Name *</label>
-                                <input type="text" name="last_name" id="last-name" placeholder="e.g. Lim" value="{{ explode(' ', auth()->user()->name)[1] ?? '' }}">
+                                <label>Last Name</label>
+                                <input type="text" name="last_name" id="last-name" placeholder="e.g. Lim" value="{{ $resume->last_name ?? '' }}">
                             </div>
                         </div>
 
                         <div class="input-row">
                             <div class="input-group">
                                 <label>Email *</label>
-                                <input type="email" name="email" id="email" placeholder="your@email.com" required value="{{ auth()->user()->email }}">
+                                <input type="email" name="email" id="email" placeholder="your@email.com" required value="{{ $resume->email ?? auth()->user()->email }}">
                             </div>
                             <div class="input-group">
                                 <label>Phone</label>
-                                <input type="tel" name="phone" id="phone" placeholder="+60 12-345 6789" value="{{ auth()->user()->resume->phone ?? '' }}">
+                                <input type="tel" name="phone" id="phone" placeholder="+60 12-345 6789" value="{{ $resume->phone ?? '' }}">
                             </div>
                         </div>
 
                         <div class="input-group">
                             <label>Address</label>
-                            <input type="text" name="address" id="address" placeholder="123 Jalan Bahagia" value="{{ auth()->user()->resume->address ?? '' }}">
+                            <input type="text" name="address" id="address" placeholder="123 Jalan Bahagia" value="{{ $resume->address ?? '' }}">
                         </div>
 
                         <div class="input-row">
                             <div class="input-group">
                                 <label>City / State</label>
-                                <input type="text" name="city" id="city" placeholder="Kuala Lumpur" value="{{ auth()->user()->resume->city ?? '' }}">
+                                <input type="text" name="city" id="city" placeholder="Kuala Lumpur" value="{{ $resume->city ?? '' }}">
                             </div>
                             <div class="input-group">
                                 <label>Country</label>
@@ -470,49 +474,49 @@
                         <h2 class="section-title">Professional Summary</h2>
                         <div class="input-group">
                             <label>About You</label>
-                            <textarea name="summary" id="summary" placeholder="Write a brief professional summary...">{{ auth()->user()->resume->summary ?? '' }}</textarea>
+                            <textarea name="summary" id="summary" placeholder="Write a brief professional summary...">{{ $resume->summary ?? '' }}</textarea>
                         </div>
 
                         <h2 class="section-title">Work Experience</h2>
                         <div class="input-group">
                             <label>Company Name</label>
-                            <input type="text" name="experience_company" id="exp-company" placeholder="e.g. Google Malaysia" value="{{ auth()->user()->resume->experience_company ?? '' }}">
+                            <input type="text" name="experience_company" id="exp-company" placeholder="e.g. Google Malaysia" value="{{ $resume->experience_company ?? '' }}">
                         </div>
                         <div class="input-row">
                             <div class="input-group">
                                 <label>Job Title</label>
-                                <input type="text" name="experience_title" id="exp-title" placeholder="e.g. Senior Developer" value="{{ auth()->user()->resume->experience_title ?? '' }}">
+                                <input type="text" name="experience_title" id="exp-title" placeholder="e.g. Senior Developer" value="{{ $resume->experience_title ?? '' }}">
                             </div>
                             <div class="input-group">
                                 <label>Duration</label>
-                                <input type="text" name="experience_duration" id="exp-duration" placeholder="e.g. 2020 - 2023" value="{{ auth()->user()->resume->experience_duration ?? '' }}">
+                                <input type="text" name="experience_duration" id="exp-duration" placeholder="e.g. 2020 - 2023" value="{{ $resume->experience_duration ?? '' }}">
                             </div>
                         </div>
                         <div class="input-group">
                             <label>Description</label>
-                            <textarea name="experience_description" id="exp-description" placeholder="Describe your responsibilities...">{{ auth()->user()->resume->experience_description ?? '' }}</textarea>
+                            <textarea name="experience_description" id="exp-description" placeholder="Describe your responsibilities...">{{ $resume->experience_description ?? '' }}</textarea>
                         </div>
 
                         <h2 class="section-title">Education</h2>
                         <div class="input-group">
                             <label>Institution</label>
-                            <input type="text" name="education_institution" id="edu-institution" placeholder="e.g. Universiti Malaya" value="{{ auth()->user()->resume->education_institution ?? '' }}">
+                            <input type="text" name="education_institution" id="edu-institution" placeholder="e.g. Universiti Malaya" value="{{ $resume->education_institution ?? '' }}">
                         </div>
                         <div class="input-row">
                             <div class="input-group">
                                 <label>Degree</label>
-                                <input type="text" name="education_degree" id="edu-degree" placeholder="e.g. BSc Computer Science" value="{{ auth()->user()->resume->education_degree ?? '' }}">
+                                <input type="text" name="education_degree" id="edu-degree" placeholder="e.g. BSc Computer Science" value="{{ $resume->education_degree ?? '' }}">
                             </div>
                             <div class="input-group">
                                 <label>Year</label>
-                                <input type="text" name="education_year" id="edu-year" placeholder="e.g. 2016 - 2020" value="{{ auth()->user()->resume->education_year ?? '' }}">
+                                <input type="text" name="education_year" id="edu-year" placeholder="e.g. 2016 - 2020" value="{{ $resume->education_year ?? '' }}">
                             </div>
                         </div>
 
                         <h2 class="section-title">Skills</h2>
                         <div class="input-group">
                             <label>Your Skills (comma separated)</label>
-                            <input type="text" name="skills" id="skills" placeholder="e.g. PHP, Laravel, JavaScript, React" value="{{ auth()->user()->resume->skills ?? '' }}">
+                            <input type="text" name="skills" id="skills" placeholder="e.g. PHP, Laravel, JavaScript, React" value="{{ $resume->skills ?? '' }}">
                         </div>
 
                         <div class="btn-group">
@@ -531,30 +535,30 @@
             <div class="preview-panel">
                 <div class="resume-preview">
                     <div class="preview-header">
-                        <div class="preview-name" id="preview-name">{{ auth()->user()->name }}</div>
-                        <div class="preview-title" id="preview-title">{{ auth()->user()->resume->job_title ?? 'Your Job Title' }}</div>
+                        <div class="preview-name" id="preview-name">{{ $resume->first_name ?? auth()->user()->name }} {{ $resume->last_name ?? '' }}</div>
+                        <div class="preview-title" id="preview-title">{{ $resume->job_title ?? 'Your Job Title' }}</div>
                         <div class="preview-contact" id="preview-contact">
-                            <span id="preview-email">{{ auth()->user()->email }}</span>
+                            <span id="preview-email">{{ $resume->email ?? auth()->user()->email }}</span>
                             <span>|</span>
-                            <span id="preview-phone">{{ auth()->user()->resume->phone ?? '+60 00-000 0000' }}</span>
+                            <span id="preview-phone">{{ $resume->phone ?? '+60 00-000 0000' }}</span>
                         </div>
                     </div>
 
                     <div class="preview-section">
                         <h3>Summary</h3>
                         <p id="preview-summary" style="color:#64748b;">
-                            {{ auth()->user()->resume->summary ?? 'Your professional summary will appear here...' }}
+                            {{ $resume->summary ?? 'Your professional summary will appear here...' }}
                         </p>
                     </div>
 
                     <div class="preview-section">
                         <h3>Experience</h3>
                         <div id="preview-experience">
-                            @if(auth()->user()->resume && auth()->user()->resume->experience_company)
+                            @if($resume && $resume->experience_company)
                                 <div class="preview-item">
-                                    <h4>{{ auth()->user()->resume->experience_title }}</h4>
-                                    <p>{{ auth()->user()->resume->experience_company }} | {{ auth()->user()->resume->experience_duration }}</p>
-                                    <p>{{ auth()->user()->resume->experience_description }}</p>
+                                    <h4>{{ $resume->experience_title }}</h4>
+                                    <p>{{ $resume->experience_company }} | {{ $resume->experience_duration }}</p>
+                                    <p>{{ $resume->experience_description }}</p>
                                 </div>
                             @else
                                 <p style="color:#94a3b8; font-style:italic;">Your work history will appear here</p>
@@ -565,10 +569,10 @@
                     <div class="preview-section">
                         <h3>Education</h3>
                         <div id="preview-education">
-                            @if(auth()->user()->resume && auth()->user()->resume->education_institution)
+                            @if($resume && $resume->education_institution)
                                 <div class="preview-item">
-                                    <h4>{{ auth()->user()->resume->education_degree }}</h4>
-                                    <p>{{ auth()->user()->resume->education_institution }} | {{ auth()->user()->resume->education_year }}</p>
+                                    <h4>{{ $resume->education_degree }}</h4>
+                                    <p>{{ $resume->education_institution }} | {{ $resume->education_year }}</p>
                                 </div>
                             @else
                                 <p style="color:#94a3b8; font-style:italic;">Your education will appear here</p>
@@ -579,8 +583,8 @@
                     <div class="preview-section">
                         <h3>Skills</h3>
                         <div id="preview-skills">
-                            @if(auth()->user()->resume && auth()->user()->resume->skills)
-                                <p>{{ auth()->user()->resume->skills }}</p>
+                            @if($resume && $resume->skills)
+                                <p>{{ $resume->skills }}</p>
                             @else
                                 <p style="color:#94a3b8; font-style:italic;">Your skills will appear here</p>
                             @endif
@@ -592,130 +596,200 @@
     </main>
 
     <script>
+        console.log('✅ Script loading...');
+
         // Toggle Dropdown
         function toggleDropdown() {
-            document.getElementById('userDropdown').classList.toggle('show');
+            const dropdown = document.getElementById('userDropdown');
+            if (dropdown) {
+                dropdown.classList.toggle('show');
+            }
         }
+
         window.addEventListener('click', function(e) {
             if (!e.target.closest('.user-menu')) {
-                document.getElementById('userDropdown').classList.remove('show');
+                const dropdown = document.getElementById('userDropdown');
+                if (dropdown) {
+                    dropdown.classList.remove('show');
+                }
             }
         });
 
-        // Live Preview Updates
+        // Get all input elements with null checks
+        function getElement(id) {
+            const el = document.getElementById(id);
+            if (!el) console.warn('Element not found:', id);
+            return el;
+        }
+
         const inputs = {
-            'job-title': document.getElementById('job-title'),
-            'first-name': document.getElementById('first-name'),
-            'last-name': document.getElementById('last-name'),
-            'email': document.getElementById('email'),
-            'phone': document.getElementById('phone'),
-            'summary': document.getElementById('summary'),
-            'exp-company': document.getElementById('exp-company'),
-            'exp-title': document.getElementById('exp-title'),
-            'exp-duration': document.getElementById('exp-duration'),
-            'exp-description': document.getElementById('exp-description'),
-            'edu-institution': document.getElementById('edu-institution'),
-            'edu-degree': document.getElementById('edu-degree'),
-            'edu-year': document.getElementById('edu-year'),
-            'skills': document.getElementById('skills')
+            'job-title': getElement('job-title'),
+            'first-name': getElement('first-name'),
+            'last-name': getElement('last-name'),
+            'email': getElement('email'),
+            'phone': getElement('phone'),
+            'summary': getElement('summary'),
+            'exp-company': getElement('exp-company'),
+            'exp-title': getElement('exp-title'),
+            'exp-duration': getElement('exp-duration'),
+            'exp-description': getElement('exp-description'),
+            'edu-institution': getElement('edu-institution'),
+            'edu-degree': getElement('edu-degree'),
+            'edu-year': getElement('edu-year'),
+            'skills': getElement('skills')
         };
 
-        const scoreFill = document.getElementById('score-fill');
-        const scoreText = document.getElementById('score-text');
+        const scoreFill = getElement('score-fill');
+        const scoreText = getElement('score-text');
 
+        // Update preview function
         function updatePreview() {
-            // Update name
-            const fullName = `${inputs['first-name'].value || 'Your'} ${inputs['last-name'].value || 'Name'}`.trim();
-            document.getElementById('preview-name').textContent = fullName;
+            if (!inputs['first-name'] || !inputs['job-title']) return;
+
+            const fullName = `${inputs['first-name'].value || 'Your'} ${inputs['last-name']?.value || 'Name'}`.trim();
+            const nameEl = document.getElementById('preview-name');
+            if (nameEl) nameEl.textContent = fullName;
             
-            // Update other fields
-            document.getElementById('preview-title').textContent = inputs['job-title'].value || 'Your Job Title';
-            document.getElementById('preview-email').textContent = inputs.email.value || 'email@domain.com';
-            document.getElementById('preview-phone').textContent = inputs.phone.value || '+60 00-000 0000';
-            document.getElementById('preview-summary').textContent = inputs.summary.value || 'Your professional summary will appear here...';
+            const titleEl = document.getElementById('preview-title');
+            if (titleEl) titleEl.textContent = inputs['job-title'].value || 'Your Job Title';
+            
+            const emailEl = document.getElementById('preview-email');
+            if (emailEl && inputs.email) emailEl.textContent = inputs.email.value || 'email@domain.com';
+            
+            const phoneEl = document.getElementById('preview-phone');
+            if (phoneEl && inputs.phone) phoneEl.textContent = inputs.phone.value || '+60 00-000 0000';
+            
+            const summaryEl = document.getElementById('preview-summary');
+            if (summaryEl && inputs.summary) summaryEl.textContent = inputs.summary.value || 'Your professional summary will appear here...';
             
             // Update experience
-            if (inputs['exp-company'].value || inputs['exp-title'].value) {
-                document.getElementById('preview-experience').innerHTML = `
+            const expEl = document.getElementById('preview-experience');
+            if (expEl && (inputs['exp-company']?.value || inputs['exp-title']?.value)) {
+                expEl.innerHTML = `
                     <div class="preview-item">
-                        <h4>${inputs['exp-title'].value || 'Job Title'}</h4>
-                        <p>${inputs['exp-company'].value || 'Company'} | ${inputs['exp-duration'].value || 'Duration'}</p>
-                        <p>${inputs['exp-description'].value || 'Description'}</p>
+                        <h4>${inputs['exp-title']?.value || 'Job Title'}</h4>
+                        <p>${inputs['exp-company']?.value || 'Company'} | ${inputs['exp-duration']?.value || 'Duration'}</p>
+                        <p>${inputs['exp-description']?.value || 'Description'}</p>
                     </div>
                 `;
             }
             
             // Update education
-            if (inputs['edu-institution'].value || inputs['edu-degree'].value) {
-                document.getElementById('preview-education').innerHTML = `
+            const eduEl = document.getElementById('preview-education');
+            if (eduEl && (inputs['edu-institution']?.value || inputs['edu-degree']?.value)) {
+                eduEl.innerHTML = `
                     <div class="preview-item">
-                        <h4>${inputs['edu-degree'].value || 'Degree'}</h4>
-                        <p>${inputs['edu-institution'].value || 'Institution'} | ${inputs['edu-year'].value || 'Year'}</p>
+                        <h4>${inputs['edu-degree']?.value || 'Degree'}</h4>
+                        <p>${inputs['edu-institution']?.value || 'Institution'} | ${inputs['edu-year']?.value || 'Year'}</p>
                     </div>
                 `;
             }
             
             // Update skills
-            if (inputs.skills.value) {
-                document.getElementById('preview-skills').innerHTML = `<p>${inputs.skills.value}</p>`;
+            const skillsEl = document.getElementById('preview-skills');
+            if (skillsEl && inputs.skills?.value) {
+                skillsEl.innerHTML = `<p>${inputs.skills.value}</p>`;
             }
             
             // Calculate completion score
-            const filled = Object.values(inputs).filter(i => i && i.value && i.value.trim() !== '' && i !== inputs.country).length;
+            const filled = Object.values(inputs).filter(i => i && i.value && i.value.trim() !== '').length;
             const score = Math.min(10 + filled * 6, 100);
-            scoreFill.style.width = `${score}%`;
-            scoreText.textContent = `${score}%`;
+            if (scoreFill) scoreFill.style.width = `${score}%`;
+            if (scoreText) scoreText.textContent = `${score}%`;
         }
 
         // Photo preview
-        document.getElementById('photo-input').addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(ev) {
-                    document.getElementById('photo-preview').innerHTML = `<img src="${ev.target.result}" alt="Profile">`;
-                };
-                reader.readAsDataURL(file);
-            }
-        });
+        const photoInput = getElement('photo-input');
+        if (photoInput) {
+            photoInput.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(ev) {
+                        const preview = document.getElementById('photo-preview');
+                        if (preview) {
+                            preview.innerHTML = `<img src="${ev.target.result}" alt="Profile">`;
+                        }
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+        }
 
-        // Attach listeners
+        // Attach input listeners
         Object.values(inputs).forEach(input => {
             if (input) {
                 input.addEventListener('input', updatePreview);
             }
         });
 
-        // Form submission
-        document.getElementById('resume-form').addEventListener('submit', function(e) {
-            e.preventDefault();
+// Form submission
+const form = getElement('resume-form');
+if (form) {
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        console.log('=== SUBMITTING FORM ===');
+        
+        const formData = new FormData(this);
+        const saveBtn = this.querySelector('.save-btn');
+        
+        if (saveBtn) {
+            saveBtn.innerHTML = '⏳ Saving...';
+            saveBtn.disabled = true;
+        }
+        
+        fetch(this.action, {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+            }
+        })
+        .then(response => {
+            console.log('Status:', response.status);
             
-            const formData = new FormData(this);
+            // Check if response is actually JSON
+            const contentType = response.headers.get('content-type');
+            if (contentType && contentType.includes('application/json')) {
+                return response.json();
+            } else {
+                throw new Error('Response is not JSON');
+            }
+        })
+        .then(data => {
+            console.log('Data received:', data);
             
-            fetch(this.action, {
-                method: 'POST',
-                body: formData,
-                headers: {
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-                }
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    document.getElementById('success-message').classList.add('show');
-                    setTimeout(() => {
-                        document.getElementById('success-message').classList.remove('show');
-                    }, 3000);
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('Error saving resume. Please try again.');
-            });
+            if (data.success) {
+                // Show success alert
+                alert('✅ Resume saved successfully!');
+                
+                // Redirect to profile after 1 second
+                setTimeout(function() {
+                    window.location.href = '{{ route("profile") }}';
+                }, 1000);
+            } else {
+                alert('❌ Error: ' + (data.message || 'Unknown error'));
+            }
+        })
+        .catch(error => {
+            console.error('Fetch error:', error);
+            alert('❌ Error saving resume: ' + error.message);
+        })
+        .finally(() => {
+            if (saveBtn) {
+                saveBtn.innerHTML = '💾 Save Resume';
+                saveBtn.disabled = false;
+            }
         });
-
+    });
+} else {
+    console.error('❌ Form not found!');
+}
         // Initial preview update
         updatePreview();
+
+        console.log('✅ Script loaded successfully');
     </script>
 </body>
 </html>
