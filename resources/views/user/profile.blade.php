@@ -568,6 +568,100 @@
     <div class="container">
         <h1 class="page-title">User Profile</h1>
 
+        <!-- AI ENCOURAGEMENT SECTION - Add this after your page title -->
+        <div class="ai-encouragement-card" id="aiEncouragementCard" style="display: none;">
+            <div class="encouragement-icon">💜</div>
+            <div class="encouragement-text" id="encouragementText">
+                Loading your personalized message...
+            </div>
+            <div class="completion-bar">
+                <div class="completion-fill" id="completionFill" style="width: 0%"></div>
+            </div>
+            <div class="completion-label" id="completionLabel">0% Complete</div>
+        </div>
+
+        <style>
+        .ai-encouragement-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            border-radius: 20px;
+            padding: 30px;
+            margin: 20px 0;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(102, 126, 234, 0.3);
+            animation: slideDown 0.5s ease;
+            color: white;
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .encouragement-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .encouragement-text {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .completion-bar {
+            background: rgba(255, 255, 255, 0.3);
+            height: 12px;
+            border-radius: 20px;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+
+        .completion-fill {
+            background: linear-gradient(90deg, #ffd700, #ff8c00);
+            height: 100%;
+            border-radius: 20px;
+            transition: width 1s ease;
+        }
+
+        .completion-label {
+            font-size: 1rem;
+            font-weight: 600;
+            color: white;
+        }
+        </style>
+
+        <script>
+        // Fetch AI encouragement on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            fetch('/ai/profile-encouragement', {
+                method: 'GET',
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                    'Accept': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    document.getElementById('encouragementText').textContent = data.message;
+                    document.getElementById('completionFill').style.width = data.completion + '%';
+                    document.getElementById('completionLabel').textContent = data.completion + '% Complete';
+                    document.getElementById('aiEncouragementCard').style.display = 'block';
+                }
+            })
+            .catch(error => {
+                console.log('AI encouragement not loaded:', error);
+            });
+        });
+        </script>
+
         @if(session('success'))
         <div class="success-message">
             <i class="fas fa-check-circle"></i>

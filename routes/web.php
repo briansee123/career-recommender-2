@@ -6,7 +6,8 @@ use App\Http\Controllers\JobController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PersonalityTestController;
 use App\Http\Controllers\AdminController;
-use App\Http\Controllers\ResumeController; // ← Added this import
+use App\Http\Controllers\ResumeController;
+use App\Http\Controllers\AIController; 
 
 // Redirect root to login
 Route::get('/', function () {
@@ -65,3 +66,10 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
     Route::get('/questions', [AdminController::class, 'questions'])->name('admin.questions');
     Route::post('/questions/update', [AdminController::class, 'updateQuestions'])->name('admin.questions.update');
 });
+
+// AI Routes
+Route::middleware('auth')->group(function () {
+    Route::get('/ai/profile-encouragement', [AIController::class, 'profileEncouragement'])->name('ai.profile');
+    Route::post('/ai/chat', [AIController::class, 'chat'])->name('ai.chat');
+});
+Route::post('/ai/analyze-career-test', [AIController::class, 'analyzeCareerTest'])->name('ai.analyze');
