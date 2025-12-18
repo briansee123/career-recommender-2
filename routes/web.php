@@ -32,11 +32,15 @@ Route::middleware(['auth'])->group(function () {
     // Profile
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile');
     Route::post('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
-    Route::post('/profile/upload-resume', [ProfileController::class, 'uploadResume'])->name('profile.uploadResume');
     Route::delete('/profile/application/{id}', [ProfileController::class, 'deleteApplication'])->name('profile.deleteApplication');
     
+    // Resume Management
+    Route::post('/profile/upload-resume', [ProfileController::class, 'uploadResume'])->name('profile.uploadResume');
+    Route::delete('/profile/resume/file', [ProfileController::class, 'deleteResumeFile'])->name('profile.deleteResumeFile');
+    Route::delete('/profile/resume/record', [ProfileController::class, 'deleteResumeRecord'])->name('profile.deleteResumeRecord');
+    
     // Personality Test
-    Route::get('/test', [PersonalityTestController::class, 'showTest'])->name('test');
+    Route::get('/test', [App\Http\Controllers\TestController::class, 'index'])->name('test');
     Route::post('/test', [PersonalityTestController::class, 'submitTest'])->name('test.submit');
     
     // Resume Builder Routes
@@ -46,25 +50,27 @@ Route::middleware(['auth'])->group(function () {
 });
 
 // Admin routes (protected by auth middleware)
-Route::middleware(['auth'])->prefix('admin')->group(function () {
-    Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
-    Route::get('/profile', [AdminController::class, 'profile'])->name('admin.profile');
-    Route::post('/profile', [AdminController::class, 'updateProfile'])->name('admin.profile.update');
+Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
+    Route::get('/profile', [AdminController::class, 'profile'])->name('profile');
+    Route::post('/profile', [AdminController::class, 'updateProfile'])->name('profile.update');
     
     // User Management
-    Route::get('/users', [AdminController::class, 'users'])->name('admin.users');
-    Route::post('/users/create', [AdminController::class, 'createUser'])->name('admin.users.create');
-    Route::delete('/users/{id}', [AdminController::class, 'deleteUser'])->name('admin.users.delete');
+    Route::get('/users', [AdminController::class, 'users'])->name('users');
+    Route::post('/users/create', [AdminController::class, 'createUser'])->name('users.create');
+    Route::delete('/users/{id}', [AdminController::class, 'deleteUser'])->name('users.delete');
     
     // Job Management
-    Route::get('/jobs', [AdminController::class, 'jobs'])->name('admin.jobs');
-    Route::post('/jobs/create', [AdminController::class, 'createJob'])->name('admin.jobs.create');
-    Route::put('/jobs/{id}', [AdminController::class, 'updateJob'])->name('admin.jobs.update');
-    Route::delete('/jobs/{id}', [AdminController::class, 'deleteJob'])->name('admin.jobs.delete');
+    Route::get('/jobs', [AdminController::class, 'jobs'])->name('jobs');
+    Route::post('/jobs/create', [AdminController::class, 'createJob'])->name('jobs.create');
+    Route::put('/jobs/{id}', [AdminController::class, 'updateJob'])->name('jobs.update');
+    Route::delete('/jobs/{id}', [AdminController::class, 'deleteJob'])->name('jobs.delete');
     
     // Question Management
-    Route::get('/questions', [AdminController::class, 'questions'])->name('admin.questions');
-    Route::post('/questions/update', [AdminController::class, 'updateQuestions'])->name('admin.questions.update');
+    Route::get('/questions', [App\Http\Controllers\Admin\AdminQuestionController::class, 'index'])->name('questions');
+    Route::post('/questions/update', [App\Http\Controllers\Admin\AdminQuestionController::class, 'update'])->name('questions.update');
+    Route::post('/questions/store', [App\Http\Controllers\Admin\AdminQuestionController::class, 'store'])->name('questions.store');
+    Route::delete('/questions/{id}', [App\Http\Controllers\Admin\AdminQuestionController::class, 'destroy'])->name('questions.destroy');
 });
 
 // AI Routes

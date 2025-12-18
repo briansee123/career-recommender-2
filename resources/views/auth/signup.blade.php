@@ -1,218 +1,226 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Career Path Recommender - Sign Up</title>
-  <link href="https://fonts.googleapis.com/css?family=Montserrat:700,400&display=swap" rel="stylesheet">
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      min-height: 100vh;
-      font-family: 'Montserrat', Arial, sans-serif;
-      background: linear-gradient(120deg, #4a90e2 0%, #f76b1c 100%);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .container {
-      background: #fff;
-      border-radius: 18px;
-      box-shadow: 0 4px 24px rgba(0,0,0,0.08);
-      max-width: 800px;
-      width: 100%;
-      padding: 40px 0 20px 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-    .title {
-      font-size: 2.3rem;
-      font-weight: 700;
-      text-align: center;
-      margin-bottom: 8px;
-      letter-spacing: 1px;
-    }
-    .title .path {
-      color: #f76b1c;
-    }
-    .desc {
-      color: #555;
-      font-size: 1.1rem;
-      margin-bottom: 32px;
-      text-align: center;
-    }
-    .signup-box {
-      display: flex;
-      width: 90%;
-      max-width: 700px;
-      background: #fff;
-      border-radius: 10px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.03);
-      overflow: hidden;
-      margin-bottom: 18px;
-    }
-    .signup-social, .signup-form {
-      flex: 1;
-      padding: 32px 28px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-    }
-    .signup-social {
-      border-right: 1px solid #eee;
-      align-items: center;
-    }
-    .signup-social button {
-      width: 100%;
-      margin-bottom: 18px;
-      padding: 10px 0;
-      border: 1px solid #4a90e2;
-      border-radius: 6px;
-      background: #fff;
-      color: #333;
-      font-size: 1rem;
-      font-weight: 500;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: box-shadow 0.2s;
-      box-shadow: 0 2px 4px rgba(74,144,226,0.07);
-    }
-    .signup-social button img {
-      height: 22px;
-      margin-right: 10px;
-    }
-    .signup-social .login-link {
-      margin-top: 10px;
-      font-size: 0.98rem;
-      color: #4a90e2;
-      text-decoration: none;
-      text-align: center;
-    }
-    .signup-form label {
-      font-weight: 600;
-      margin-bottom: 6px;
-      margin-top: 10px;
-      color: #222;
-    }
-    .signup-form input {
-      width: 100%;
-      padding: 8px 10px;
-      margin-bottom: 10px;
-      border: 1px solid #ddd;
-      border-radius: 5px;
-      background: #fdfad6;
-      font-size: 1rem;
-    }
-    .signup-form .terms {
-      color: #666;
-      font-size: 0.9rem;
-      margin-bottom: 18px;
-      text-align: center;
-    }
-    .signup-form .terms a {
-      color: #4a90e2;
-      text-decoration: none;
-    }
-    .signup-form button {
-      width: 100%;
-      padding: 10px 0;
-      border: none;
-      border-radius: 6px;
-      background: linear-gradient(90deg, #4a90e2 0%, #f76b1c 100%);
-      color: #fff;
-      font-size: 1.1rem;
-      font-weight: 600;
-      cursor: pointer;
-      margin-top: 8px;
-      box-shadow: 0 2px 6px rgba(74,144,226,0.09);
-      transition: background 0.2s;
-    }
-    .footer {
-      margin-top: 18px;
-      text-align: center;
-      color: #666;
-      font-size: 0.98rem;
-    }
-    .footer a {
-      color: #4a90e2;
-      text-decoration: none;
-      margin: 0 8px;
-      font-size: 0.98rem;
-    }
-    @media (max-width: 700px) {
-      .container {
-        padding: 18px 0 10px 0;
-      }
-      .signup-box {
-        flex-direction: column;
-        min-width: 0;
-      }
-      .signup-social, .signup-form {
-        border-right: none;
-        border-bottom: 1px solid #eee;
-        padding: 22px 12px;
-      }
-      .signup-form {
-        border-bottom: none;
-      }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up - Career Path Recommender</title>
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:700,400&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Montserrat', Arial, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(120deg, #4a90e2 0%, #f76b1c 100%);
+            padding: 40px 20px;
+        }
+        .container {
+            background: #fff;
+            border-radius: 24px;
+            box-shadow: 0 8px 40px rgba(0,0,0,0.15);
+            max-width: 550px;
+            width: 100%;
+            padding: 60px 50px;
+        }
+        .title {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .title h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin: 0 0 10px 0;
+            letter-spacing: 1px;
+        }
+        .title .signup { color: #f76b1c; }
+        .desc {
+            color: #666;
+            font-size: 1.2rem;
+            margin: 0;
+        }
+        .form-group {
+            margin-bottom: 25px;
+        }
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #333;
+            font-size: 1.1rem;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 15px 18px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            background: #fdfad6;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+        }
+        .form-group input:focus {
+            outline: none;
+            border-color: #4a90e2;
+            box-shadow: 0 0 0 3px rgba(74,144,226,0.1);
+        }
+        .error-message {
+            background: #fee2e2;
+            border: 1px solid #ef4444;
+            color: #991b1b;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 1rem;
+        }
+        .success-message {
+            background: #d1fae5;
+            border: 1px solid #10b981;
+            color: #065f46;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 1rem;
+        }
+        .terms {
+            color: #666;
+            font-size: 0.95rem;
+            margin-bottom: 25px;
+            text-align: center;
+            line-height: 1.5;
+        }
+        .submit-btn {
+            width: 100%;
+            padding: 16px 0;
+            border: none;
+            border-radius: 10px;
+            background: linear-gradient(90deg, #4a90e2 0%, #f76b1c 100%);
+            color: #fff;
+            font-size: 1.3rem;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(74,144,226,0.3);
+            transition: all 0.3s;
+        }
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(74,144,226,0.4);
+        }
+        .login-link {
+            text-align: center;
+            margin-top: 30px;
+        }
+        .login-link p {
+            color: #666;
+            font-size: 1.1rem;
+            margin: 0;
+        }
+        .login-link a {
+            color: #4a90e2;
+            font-weight: 600;
+            text-decoration: none;
+        }
+        .login-link a:hover { text-decoration: underline; }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 40px 30px;
+            }
+            .title h1 {
+                font-size: 2.5rem;
+            }
+        }
+    </style>
 </head>
 <body>
-  <div class="container">
-    <div class="title">
-      SIGN <span class="path">UP</span>
-    </div>
-    <div class="desc">
-      A place to discover your future and make informed career choices
-    </div>
-    <div class="signup-box">
-      <div class="signup-social">
-        <button><img src="https://img.icons8.com/color/24/000000/google-logo.png" alt="Google icon">Continue with Google</button>
-        <button><img src="https://img.icons8.com/color/24/000000/facebook-new.png" alt="Facebook icon">Continue with Facebook</button>
-        <a class="login-link" href="{{ route('login') }}">Already have an account? Login</a>
-      </div>
-      <div class="signup-form">
+    <div class="container">
+        <!-- Title -->
+        <div class="title">
+            <h1>SIGN <span class="signup">UP</span></h1>
+            <p class="desc">A place to discover your future and make informed career choices</p>
+        </div>
+
+        <!-- Signup Form -->
         <form method="POST" action="{{ route('signup.post') }}">
-  @csrf
-  <label for="fullname">Full Name</label>
-  <input type="text" id="fullname" name="fullname" placeholder="Enter your full name" required value="{{ old('fullname') }}">
-  
-  <label for="email">Email Address</label>
-  <input type="email" id="email" name="email" placeholder="Enter your email address" required value="{{ old('email') }}">
-  @error('email')
-    <div style="color: #dc3545; font-size: 0.9rem; margin-top: -8px; margin-bottom: 10px;">{{ $message }}</div>
-  @enderror
-  
-  <label for="password">Password</label>
-  <input type="password" id="password" name="password" placeholder="Create a password" required>
-  @error('password')
-    <div style="color: #dc3545; font-size: 0.9rem; margin-top: -8px; margin-bottom: 10px;">{{ $message }}</div>
-  @enderror
-  
-  <label for="password_confirmation">Confirm Password</label>
-  <input type="password" id="password_confirmation" name="password_confirmation" placeholder="Confirm your password" required>
-  
-  <div class="terms">
-    By signing up, you agree to our <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>
-  </div>
-  <button type="submit">Create Account</button>
-</form>
-      </div>
+            @csrf
+            
+            <div class="form-group">
+                <label for="name">Full Name</label>
+                <input 
+                    type="text" 
+                    id="name" 
+                    name="name" 
+                    placeholder="Enter your full name" 
+                    value="{{ old('name') }}"
+                    required
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input 
+                    type="email" 
+                    id="email" 
+                    name="email" 
+                    placeholder="Enter your email address" 
+                    value="{{ old('email') }}"
+                    required
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input 
+                    type="password" 
+                    id="password" 
+                    name="password" 
+                    placeholder="Create a password" 
+                    required
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="password_confirmation">Confirm Password</label>
+                <input 
+                    type="password" 
+                    id="password_confirmation" 
+                    name="password_confirmation" 
+                    placeholder="Confirm your password" 
+                    required
+                >
+            </div>
+
+            <!-- Error Messages -->
+            @if($errors->any())
+            <div class="error-message">
+                <ul style="margin: 0; padding-left: 20px;">
+                    @foreach($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+            @endif
+
+            <!-- Success Message -->
+            @if(session('success'))
+            <div class="success-message">
+                {{ session('success') }}
+            </div>
+            @endif
+
+            <!-- Terms -->
+            <div class="terms">
+                By signing up, you agree that you understand our terms of service and privacy policy.
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" class="submit-btn">Create Account</button>
+        </form>
+
+        <!-- Login Link -->
+        <div class="login-link">
+            <p>Already have an account? <a href="{{ route('login') }}">Login here</a></p>
+        </div>
     </div>
-    <div class="footer">
-      <a href="#">About</a> ·
-      <a href="#">Careers</a> ·
-      <a href="#">Privacy</a> ·
-      <a href="#">Terms</a> ·
-      <a href="#">Contact</a>
-      <br>
-      © Career Path Recommender, 2023
-    </div>
-  </div>
 </body>
 </html>

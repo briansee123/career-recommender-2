@@ -9,75 +9,65 @@ use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
-    // Show login page
     public function showLogin()
     {
         return view('auth.login');
     }
 
-    // Handle login
     public function login(Request $request)
     {
-        $credentials = $request->validate([
-            'username' => 'required',
-            'password' => 'required'
+        $request->validate([
+            'email' => 'required|string',
+            'password' => 'required|string',
         ]);
 
-        // Try to find user by email or name
-        $user = User::where('email', $credentials['username'])
-                    ->orWhere('name', $credentials['username'])
-                    ->first();
+        // Find user
+        $user = User::where('email', $request->email)->first();
 
-        if ($user && Hash::check($credentials['password'], $user->password)) {
+        // Check password (Hash::check handles the hashed password from DB)
+        if ($user && Hash::check($request->password, $user->password)) {
             Auth::login($user);
             
-            // Redirect based on role
             if ($user->is_admin) {
                 return redirect()->route('admin.dashboard');
             }
+            
             return redirect()->route('homepage');
         }
 
-        return back()->withErrors([
-            'username' => 'Invalid username or password.',
-        ])->withInput();
+        return back()->withErrors(['email' => 'Invalid credentials']);
     }
 
-    // Show signup page
     public function showSignup()
     {
         return view('auth.signup');
     }
 
-    // Handle signup
     public function signup(Request $request)
     {
-        $validated = $request->validate([
-            'fullname' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required|min:6|confirmed',
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'password' => 'required|string|min:8|confirmed',
         ]);
 
+        // Create user with PLAIN password (Model handles hashing)
         $user = User::create([
-            'name' => $validated['fullname'],
-            'email' => $validated['email'],
-            'password' => Hash::make($validated['password']),
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => $request->password, // <--- CHANGED: Removed Hash::make()
             'is_admin' => false,
             'status' => 'active'
         ]);
 
         Auth::login($user);
-        
-        return redirect()->route('homepage');
+
+        return redirect()->route('homepage')->with('success', 'Account created successfully!');
     }
 
-    // Handle logout
-    public function logout(Request $request)
+    public function logout()
     {
         Auth::logout();
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
-        
         return redirect()->route('login');
     }
 }

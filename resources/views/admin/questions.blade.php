@@ -1,357 +1,349 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Test Questions - Admin Panel</title>
-    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: 'Quicksand', sans-serif;
-            background: linear-gradient(135deg, #87CEEB 0%, #E0F7FA 100%);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
+@extends('layouts.admin')
 
-        /* HEADER */
-        header {
-            background: #0d47a1;
-            color: white;
-            padding: 16px 0;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
-        }
-        .header-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0 30px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-size: 1.4rem;
-            font-weight: 700;
-        }
-        .logo-title {
-            background: linear-gradient(90deg, #4fc3f7, #81d4fa);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
+@section('title', 'Edit Test Questions')
 
-        .user-menu { position: relative; }
-        .user-icon {
-            width: 46px; height: 46px;
-            background: #ff4081; color: white;
-            border-radius: 50%; display: flex;
-            align-items: center; justify-content: center;
-            font-size: 1.2rem; cursor: pointer;
-            transition: all 0.3s;
-        }
-        .user-icon:hover { transform: scale(1.1); box-shadow: 0 0 20px rgba(255,64,129,0.5); }
-        .dropdown {
-            position: absolute; top: 60px; right: 0;
-            background: white; min-width: 200px;
-            border-radius: 16px; box-shadow: 0 12px 30px rgba(0,0,0,0.2);
-            overflow: hidden; opacity: 0; visibility: hidden;
-            transform: translateY(-10px); transition: all 0.3s ease; z-index: 1000;
-        }
-        .dropdown.show { opacity: 1; visibility: visible; transform: translateY(0); }
-        .dropdown a {
-            display: flex; align-items: center; gap: 12px;
-            padding: 14px 20px; color: #0277bd; text-decoration: none;
-            font-weight: 600; font-size: 1rem; transition: 0.3s;
-        }
-        .dropdown a:hover { background: #e3f2fd; color: #0288d1; padding-left: 26px; }
-        .dropdown a.logout { color: #e53935; border-top: 1px solid #bbdefb; }
+@section('content')
+<div style="padding: 40px 20px; max-width: 1200px; margin: 0 auto;">
+    <!-- Page Header -->
+    <div style="margin-bottom: 32px; text-align: center;">
+        <h1 style="font-size: 2.2rem; font-weight: 700; color: #1e293b; margin-bottom: 12px;">
+            📝 Edit Test Questions
+        </h1>
+        <p style="color: #64748b; font-size: 1.1rem;">Manage personality test questions (MBTI)</p>
+    </div>
 
-        /* MAIN LAYOUT */
-        .main-layout { display: flex; flex: 1; overflow: hidden; }
+    <!-- Control Buttons -->
+    <div style="background: white; border-radius: 20px; padding: 24px; margin-bottom: 30px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
+        <button 
+            onclick="toggleEditMode()" 
+            id="editBtn"
+            style="padding: 14px 32px; background: linear-gradient(135deg, #3b82f6, #2563eb); color: white; border: none; border-radius: 12px; font-size: 1.05rem; font-weight: 600; cursor: pointer; box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3); transition: all 0.3s; display: flex; align-items: center; gap: 8px;"
+        >
+            <span>✏️</span> Edit Questions
+        </button>
 
-        /* SIDEBAR */
-        .sidebar {
-            width: 270px; background: white; padding: 30px 0;
-            box-shadow: 4px 0 20px rgba(33, 150, 243, 0.15); flex-shrink: 0;
-        }
-        .sidebar-header {
-            padding: 0 30px 20px; font-size: 1.3rem; font-weight: 700;
-            color: #0277bd; border-bottom: 2px solid #bbdefb;
-            margin-bottom: 20px; display: flex; align-items: center; gap: 10px;
-        }
-        .sidebar-menu { list-style: none; }
-        .sidebar-menu a {
-            display: flex; align-items: center; gap: 14px;
-            padding: 14px 30px; color: #0288d1; text-decoration: none;
-            font-weight: 600; transition: all 0.3s ease;
-            border-left: 4px solid transparent;
-        }
-        .sidebar-menu a:hover {
-            background: #e3f2fd; color: #0277bd;
-            border-left-color: #4fc3f7; padding-left: 34px;
-        }
-        .sidebar-menu a.active {
-            background: linear-gradient(90deg, #bbdefb 0%, transparent 100%);
-            color: #0277bd; border-left-color: #0288d1; font-weight: 700;
-        }
-        .sidebar-menu i { width: 22px; font-size: 1.2rem; }
+        <button 
+            onclick="addNewQuestion()" 
+            id="addBtn"
+            style="padding: 14px 32px; background: linear-gradient(135deg, #10b981, #059669); color: white; border: none; border-radius: 12px; font-size: 1.05rem; font-weight: 600; cursor: pointer; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3); transition: all 0.3s; display: flex; align-items: center; gap: 8px;"
+        >
+            <span>➕</span> Add Question
+        </button>
 
-        /* CONTENT */
-        .content { flex: 1; padding: 40px; overflow-y: auto; }
-        .page-header {
-            background: white; border-radius: 20px; padding: 35px 45px;
-            margin-bottom: 30px; box-shadow: 0 12px 40px rgba(33, 150, 243, 0.15);
-        }
-        .page-title {
-            font-size: 2.3rem; font-weight: 700; color: #0277bd;
-            display: flex; align-items: center; gap: 14px;
-        }
+        <button 
+            onclick="saveChanges()" 
+            id="saveBtn"
+            disabled
+            style="padding: 14px 32px; background: #e2e8f0; color: #94a3b8; border: none; border-radius: 12px; font-size: 1.05rem; font-weight: 600; cursor: not-allowed; transition: all 0.3s; display: flex; align-items: center; gap: 8px;"
+        >
+            <span>💾</span> Save Changes
+        </button>
+    </div>
 
-        .controls {
-            background: white; padding: 25px 40px; border-radius: 20px;
-            margin-bottom: 30px; display: flex; gap: 20px;
-            box-shadow: 0 10px 35px rgba(33, 150, 243, 0.12);
-            flex-wrap: wrap;
-        }
-        .btn-edit, .btn-upload {
-            padding: 14px 32px; border-radius: 30px; font-size: 16px;
-            font-weight: 700; cursor: pointer; transition: all 0.3s;
-            display: flex; align-items: center; gap: 10px;
-        }
-        .btn-edit {
-            background: linear-gradient(135deg, #0288d1, #4fc3f7);
-            color: white; border: none;
-            box-shadow: 0 6px 20px rgba(2, 136, 209, 0.3);
-        }
-        .btn-edit:hover { transform: translateY(-3px); box-shadow: 0 10px 25px rgba(2, 136, 209, 0.4); }
-        .btn-upload {
-            background: #e0e0e0; color: #999; border: none;
-            cursor: not-allowed;
-        }
-        .btn-upload.enabled {
-            background: linear-gradient(135deg, #00c853, #64dd17);
-            color: white; cursor: pointer;
-            box-shadow: 0 6px 20px rgba(0, 200, 83, 0.3);
-        }
-        .btn-upload.enabled:hover { transform: translateY(-3px); }
+    <!-- Success/Error Messages -->
+    @if(session('success'))
+    <div style="background: #d1fae5; border: 2px solid #10b981; color: #065f46; padding: 16px 20px; border-radius: 12px; margin-bottom: 24px; font-size: 1rem; font-weight: 500;">
+        ✅ {{ session('success') }}
+    </div>
+    @endif
 
-        .questions-container {
-            background: white; border-radius: 20px; padding: 40px;
-            box-shadow: 0 12px 40px rgba(33, 150, 243, 0.15);
-        }
-        .section-title {
-            font-size: 1.6rem; color: #0277bd; font-weight: 700;
-            margin-bottom: 20px; padding-bottom: 10px;
-            border-bottom: 3px solid #bbdefb;
-        }
-        .question-block {
-            background: #f5fbff; border-radius: 16px;
-            padding: 24px; margin-bottom: 24px;
-            border: 2px solid #bbdefb;
-            transition: all 0.3s;
-        }
-        .question-block.editable {
-            border-color: #0288d1; background: #e3f2fd;
-            box-shadow: 0 6px 20px rgba(2, 136, 209, 0.1);
-        }
-        .question-text {
-            font-weight: 700; font-size: 1.2rem; color: #01579b;
-            margin-bottom: 16px;
-        }
-        .question-text textarea {
-            width: 100%; padding: 12px; border: 2px solid #90caf9;
-            border-radius: 12px; font-size: 1.1rem; font-family: inherit;
-            resize: vertical; min-height: 60px;
-        }
-        .options {
-            display: grid; gap: 14px;
-        }
-        .option {
-            display: flex; align-items: center; gap: 12px;
-            padding: 12px; background: white; border-radius: 12px;
-            border: 2px solid #90caf9;
-        }
+    @if(session('error'))
+    <div style="background: #fee2e2; border: 2px solid #ef4444; color: #991b1b; padding: 16px 20px; border-radius: 12px; margin-bottom: 24px; font-size: 1rem; font-weight: 500;">
+        ❌ {{ session('error') }}
+    </div>
+    @endif
 
-        /* Toast Notification */
-        .toast {
-            position: fixed; bottom: 30px; left: 50%;
-            transform: translateX(-50%); background: #00c853;
-            color: white; padding: 16px 32px; border-radius: 50px;
-            font-weight: 700; box-shadow: 0 10px 30px rgba(0,200,83,0.4);
-            opacity: 0; visibility: hidden; transition: all 0.4s;
-            z-index: 10000; display: flex; align-items: center; gap: 12px;
-        }
-        .toast.show { opacity: 1; visibility: visible; bottom: 50px; }
+    <!-- Questions Container -->
+    <div id="questionsContainer">
+        @foreach($questions as $index => $question)
+        <div class="question-card" data-id="{{ $question->id }}" style="background: white; border-radius: 20px; padding: 32px; margin-bottom: 24px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); border: 2px solid #e2e8f0; position: relative;">
+            
+            <!-- Delete Button (Hidden by default) -->
+            <button 
+                class="delete-btn" 
+                onclick="deleteQuestion({{ $question->id }})" 
+                style="display: none; position: absolute; top: 20px; right: 20px; background: #ef4444; color: white; border: none; padding: 10px 20px; border-radius: 10px; font-weight: 600; cursor: pointer; transition: all 0.3s; box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);"
+            >
+                🗑️ Delete
+            </button>
 
-        @media (max-width: 992px) {
-            .main-layout { flex-direction: column; }
-            .sidebar { width: 100%; padding: 20px 0; }
-        }
-    </style>
-</head>
-<body>
-
-    <!-- HEADER -->
-    <header>
-        <div class="header-container">
-            <div class="logo">
-                <span class="logo-title">CAREER PATH RECOMMENDER</span>
-            </div>
-            <div class="user-menu">
-                <div class="user-icon" onclick="toggleDropdown()">
-                    <i class="fas fa-user"></i>
-                </div>
-                <div class="dropdown" id="userDropdown">
-                    <a href="{{ route('admin.dashboard') }}"><i class="fas fa-home"></i> Homepage</a>
-                    <a href="{{ route('admin.profile') }}"><i class="fas fa-user-cog"></i> Admin Profile</a>
-                    <form action="{{ route('logout') }}" method="POST" style="margin: 0;">
-                        @csrf
-                        <a href="#" onclick="event.preventDefault(); this.closest('form').submit();" class="logout">
-                            <i class="fas fa-sign-out-alt"></i> Log Out
-                        </a>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </header>
-
-    <!-- MAIN LAYOUT -->
-    <div class="main-layout">
-        <!-- SIDEBAR -->
-        <aside class="sidebar">
-            <div class="sidebar-header"><i class="fas fa-shield-alt"></i> Admin Panel</div>
-            <ul class="sidebar-menu">
-                <li><a href="{{ route('admin.dashboard') }}"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
-                <li><a href="{{ route('admin.users') }}"><i class="fas fa-users"></i> Edit Users</a></li>
-                <li><a href="{{ route('admin.questions') }}" class="active"><i class="fas fa-question-circle"></i> Edit Test Questions</a></li>
-                <li><a href="{{ route('admin.jobs') }}"><i class="fas fa-briefcase"></i> Edit Jobs</a></li>
-            </ul>
-        </aside>
-
-        <!-- CONTENT -->
-        <main class="content">
-            <div class="page-header">
-                <h1 class="page-title"><i class="fas fa-question-circle"></i> Current Test Questions</h1>
+            <!-- Question Number -->
+            <div style="display: inline-block; background: linear-gradient(135deg, #3b82f6, #2563eb); color: white; padding: 8px 16px; border-radius: 10px; font-weight: 700; margin-bottom: 20px;">
+                Question {{ $index + 1 }}
             </div>
 
-            <div class="controls">
-                <button class="btn-edit" id="editBtn" onclick="enableEditing()">
-                    <i class="fas fa-edit"></i> Edit Questions
-                </button>
-                <button class="btn-upload" id="uploadBtn" disabled onclick="uploadChanges()">
-                    <i class="fas fa-cloud-upload-alt"></i> Upload Changes
-                </button>
+            <!-- Question Text -->
+            <div style="margin-bottom: 24px;">
+                <label style="display: block; font-weight: 600; color: #475569; margin-bottom: 10px; font-size: 1.05rem;">Question:</label>
+                <textarea 
+                    class="question-text" 
+                    readonly 
+                    style="width: 100%; padding: 14px 18px; border: 2px solid #cbd5e1; border-radius: 12px; font-size: 1.05rem; min-height: 80px; resize: vertical; background: #f8fafc; transition: all 0.3s;"
+                >{{ $question->question }}</textarea>
             </div>
 
-            <div class="questions-container">
-                <div class="section-title">Personality Quiz (Mini-MBTI)</div>
-
-                @foreach($questions as $question)
-                <div class="question-block" data-id="{{ $question->id }}">
-                    <div class="question-text">
-                        <textarea readonly>{{ $question->question }}</textarea>
-                    </div>
-                    <div class="options">
-                        @foreach($question->options as $option)
-                        <div class="option">
-                            <strong>{{ $option['value'] }}:</strong> {{ $option['text'] }}
-                        </div>
-                        @endforeach
-                    </div>
+            <!-- Options -->
+            <div style="margin-bottom: 16px;">
+                <label style="display: block; font-weight: 600; color: #475569; margin-bottom: 12px; font-size: 1.05rem;">Options:</label>
+                
+                @php
+                    $options = is_array($question->options) ? $question->options : json_decode($question->options, true);
+                @endphp
+                @foreach($options as $optKey => $option)
+                <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px; padding: 12px; background: #f8fafc; border-radius: 10px; border: 1px solid #e2e8f0;">
+                    <input 
+                        type="radio" 
+                        name="option_{{ $question->id }}" 
+                        value="{{ $optKey }}"
+                        disabled
+                        style="width: 18px; height: 18px; cursor: pointer;"
+                    >
+                    <input 
+                        type="text" 
+                        class="option-text" 
+                        data-key="{{ $optKey }}"
+                        value="{{ is_string($option) ? $option : '' }}" 
+                        readonly
+                        style="flex: 1; padding: 10px 14px; border: 2px solid #cbd5e1; border-radius: 8px; font-size: 1rem; background: white; transition: all 0.3s;"
+                    >
                 </div>
                 @endforeach
             </div>
-        </main>
+
+            <!-- MBTI Type Indicator -->
+            <div style="display: inline-block; background: #fef3c7; color: #92400e; padding: 8px 16px; border-radius: 8px; font-weight: 600; font-size: 0.95rem;">
+                MBTI Dimension: {{ $index + 1 }}/4
+            </div>
+        </div>
+        @endforeach
     </div>
 
-    <!-- Toast -->
-    <div class="toast" id="toast">
-        <i class="fas fa-check-circle"></i> Questions updated successfully!
+    <!-- Empty State (if no questions) -->
+    @if($questions->isEmpty())
+    <div style="background: white; border-radius: 20px; padding: 60px 40px; text-align: center; box-shadow: 0 4px 20px rgba(0,0,0,0.08);">
+        <div style="font-size: 4rem; margin-bottom: 20px;">📝</div>
+        <h3 style="font-size: 1.6rem; color: #64748b; margin-bottom: 12px;">No Questions Yet</h3>
+        <p style="color: #94a3b8; font-size: 1.05rem;">Click "Add Question" to create your first test question.</p>
     </div>
+    @endif
+</div>
 
-    <script>
-        let isEditing = false;
-        let hasChanges = false;
+<!-- Add Question Modal -->
+<div id="addModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 9999; align-items: center; justify-content: center;">
+    <div style="background: white; border-radius: 24px; padding: 40px; max-width: 600px; width: 90%; box-shadow: 0 20px 60px rgba(0,0,0,0.3); position: relative; max-height: 90vh; overflow-y: auto;">
+        <button 
+            onclick="closeModal()" 
+            style="position: absolute; top: 20px; right: 20px; background: none; border: none; font-size: 28px; cursor: pointer; color: #94a3b8; line-height: 1;"
+        >
+            ×
+        </button>
+        
+        <h2 style="font-size: 1.8rem; font-weight: 700; color: #1e293b; margin-bottom: 24px;">➕ Add New Question</h2>
+        
+        <form id="addQuestionForm" method="POST" action="{{ route('admin.questions.store') }}">
+            @csrf
+            
+            <div style="margin-bottom: 20px;">
+                <label style="display: block; font-weight: 600; color: #475569; margin-bottom: 8px;">Question Text:</label>
+                <textarea 
+                    name="question" 
+                    required 
+                    style="width: 100%; padding: 12px 16px; border: 2px solid #cbd5e1; border-radius: 12px; font-size: 1rem; min-height: 100px; resize: vertical;"
+                    placeholder="Enter your question here..."
+                ></textarea>
+            </div>
 
-        function enableEditing() {
-            if (isEditing) return;
-            isEditing = true;
+            <div style="margin-bottom: 20px;">
+                <label style="display: block; font-weight: 600; color: #475569; margin-bottom: 12px;">Options:</label>
+                
+                <div style="margin-bottom: 12px;">
+                    <input 
+                        type="text" 
+                        name="option_E" 
+                        required 
+                        placeholder="Option A (e.g., Extroverted response)"
+                        style="width: 100%; padding: 12px 16px; border: 2px solid #cbd5e1; border-radius: 10px; font-size: 1rem;"
+                    >
+                    <small style="color: #64748b; font-size: 0.85rem; display: block; margin-top: 4px;">Value key: E (for MBTI dimension)</small>
+                </div>
 
-            document.querySelectorAll('.question-block').forEach(block => {
-                block.classList.add('editable');
-                block.querySelectorAll('textarea').forEach(el => {
-                    el.removeAttribute('readonly');
-                    el.style.background = 'white';
-                });
-            });
+                <div style="margin-bottom: 12px;">
+                    <input 
+                        type="text" 
+                        name="option_I" 
+                        required 
+                        placeholder="Option B (e.g., Introverted response)"
+                        style="width: 100%; padding: 12px 16px; border: 2px solid #cbd5e1; border-radius: 10px; font-size: 1rem;"
+                    >
+                    <small style="color: #64748b; font-size: 0.85rem; display: block; margin-top: 4px;">Value key: I (for MBTI dimension)</small>
+                </div>
+            </div>
 
-            document.querySelectorAll('textarea').forEach(input => {
-                input.addEventListener('input', () => {
-                    hasChanges = true;
-                    document.getElementById('uploadBtn').classList.add('enabled');
-                    document.getElementById('uploadBtn').disabled = false;
-                });
-            });
+            <div style="margin-bottom: 24px;">
+                <label style="display: block; font-weight: 600; color: #475569; margin-bottom: 8px;">Order:</label>
+                <input 
+                    type="number" 
+                    name="order" 
+                    min="1" 
+                    value="{{ $questions->count() + 1 }}"
+                    style="width: 100%; padding: 12px 16px; border: 2px solid #cbd5e1; border-radius: 10px; font-size: 1rem;"
+                >
+            </div>
 
-            document.getElementById('editBtn').innerHTML = '<i class="fas fa-edit"></i> Editing Mode Active';
-            document.getElementById('editBtn').style.opacity = '0.8';
-        }
+            <div style="display: flex; gap: 12px;">
+                <button 
+                    type="button" 
+                    onclick="closeModal()"
+                    style="flex: 1; padding: 14px; background: #e2e8f0; color: #475569; border: none; border-radius: 12px; font-weight: 600; cursor: pointer; font-size: 1.05rem;"
+                >
+                    Cancel
+                </button>
+                <button 
+                    type="submit"
+                    style="flex: 1; padding: 14px; background: linear-gradient(135deg, #10b981, #059669); color: white; border: none; border-radius: 12px; font-weight: 600; cursor: pointer; font-size: 1.05rem;"
+                >
+                    Add Question
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
 
-        function uploadChanges() {
-            if (!hasChanges) return;
+<script>
+let isEditMode = false;
+let hasChanges = false;
 
-            const questions = [];
-            document.querySelectorAll('.question-block').forEach((block) => {
-                const id = block.getAttribute('data-id');
-                const textarea = block.querySelector('textarea');
-                questions.push({
-                    id: id,
-                    question: textarea.value
-                });
-            });
-
-            fetch('{{ route("admin.questions.update") }}', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-                },
-                body: JSON.stringify({ questions: questions })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    const toast = document.getElementById('toast');
-                    toast.classList.add('show');
-                    setTimeout(() => {
-                        toast.classList.remove('show');
-                        location.reload();
-                    }, 2000);
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('Error updating questions');
-            });
-        }
-
-        function toggleDropdown() {
-            document.getElementById('userDropdown').classList.toggle('show');
-        }
-
-        window.addEventListener('click', function(e) {
-            if (!e.target.closest('.user-menu')) {
-                document.getElementById('userDropdown').classList.remove('show');
-            }
+function toggleEditMode() {
+    isEditMode = !isEditMode;
+    const editBtn = document.getElementById('editBtn');
+    const saveBtn = document.getElementById('saveBtn');
+    const textareas = document.querySelectorAll('.question-text, .option-text');
+    const deleteButtons = document.querySelectorAll('.delete-btn');
+    
+    if (isEditMode) {
+        editBtn.innerHTML = '<span>👁️</span> View Mode';
+        editBtn.style.background = 'linear-gradient(135deg, #64748b, #475569)';
+        textareas.forEach(ta => {
+            ta.removeAttribute('readonly');
+            ta.style.background = '#fff';
+            ta.style.borderColor = '#3b82f6';
         });
-    </script>
-</body>
-</html>
+        deleteButtons.forEach(btn => btn.style.display = 'block');
+    } else {
+        editBtn.innerHTML = '<span>✏️</span> Edit Questions';
+        editBtn.style.background = 'linear-gradient(135deg, #3b82f6, #2563eb)';
+        textareas.forEach(ta => {
+            ta.setAttribute('readonly', true);
+            ta.style.background = '#f8fafc';
+            ta.style.borderColor = '#cbd5e1';
+        });
+        deleteButtons.forEach(btn => btn.style.display = 'none');
+    }
+}
+
+// Track changes
+document.addEventListener('input', function(e) {
+    if (e.target.classList.contains('question-text') || e.target.classList.contains('option-text')) {
+        hasChanges = true;
+        const saveBtn = document.getElementById('saveBtn');
+        saveBtn.disabled = false;
+        saveBtn.style.background = 'linear-gradient(135deg, #10b981, #059669)';
+        saveBtn.style.color = 'white';
+        saveBtn.style.cursor = 'pointer';
+    }
+});
+
+function saveChanges() {
+    if (!hasChanges) return;
+    
+    const questions = [];
+    document.querySelectorAll('.question-card').forEach(card => {
+        const id = card.dataset.id;
+        const questionText = card.querySelector('.question-text').value;
+        const options = {};
+        
+        card.querySelectorAll('.option-text').forEach(opt => {
+            const key = opt.dataset.key; // Get the actual key (E, I, S, N, T, F, J, P)
+            options[key] = opt.value;
+        });
+        
+        questions.push({ id, question: questionText, options });
+    });
+    
+    // Send AJAX request
+    fetch('{{ route("admin.questions.update") }}', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+        },
+        body: JSON.stringify({ questions })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('✅ Changes saved successfully!');
+            hasChanges = false;
+            location.reload();
+        }
+    })
+    .catch(error => {
+        alert('❌ Error saving changes');
+        console.error(error);
+    });
+}
+
+function deleteQuestion(id) {
+    if (!confirm('Are you sure you want to delete this question?')) return;
+    
+    fetch(`/admin/questions/${id}`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('✅ Question deleted successfully!');
+            location.reload();
+        } else {
+            alert('❌ Error: ' + (data.error || 'Unknown error'));
+        }
+    })
+    .catch(error => {
+        alert('❌ Error deleting question: ' + error.message);
+        console.error(error);
+    });
+}
+
+function addNewQuestion() {
+    document.getElementById('addModal').style.display = 'flex';
+}
+
+function closeModal() {
+    document.getElementById('addModal').style.display = 'none';
+}
+
+// Close modal on outside click
+document.getElementById('addModal').addEventListener('click', function(e) {
+    if (e.target === this) closeModal();
+});
+</script>
+
+<style>
+button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.2) !important;
+}
+
+.question-card {
+    transition: all 0.3s;
+}
+
+.question-card:hover {
+    box-shadow: 0 8px 30px rgba(0,0,0,0.12) !important;
+}
+</style>
+@endsection

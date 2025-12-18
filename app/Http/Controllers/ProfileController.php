@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\TestResult;
 use App\Models\JobApplication;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Storage; // Ensure this is imported
 
 class ProfileController extends Controller
 {
@@ -61,6 +61,33 @@ class ProfileController extends Controller
         $user->update(['resume_path' => $path]);
         
         return redirect()->route('profile')->with('success', 'Resume uploaded successfully!');
+    }
+
+    public function deleteResumeFile()
+    {
+        $user = auth()->user();
+        
+        if ($user->resume_path) {
+            if (Storage::exists('public/' . $user->resume_path)) {
+                Storage::delete('public/' . $user->resume_path);
+            }
+            $user->update(['resume_path' => null]);
+            return redirect()->route('profile')->with('success', 'Resume file deleted successfully!');
+        }
+        
+        return redirect()->route('profile')->with('error', 'No file to delete.');
+    }
+
+    public function deleteResumeRecord()
+    {
+        $user = auth()->user();
+        
+        if ($user->resume) {
+            $user->resume->delete();
+            return redirect()->route('profile')->with('success', 'Digital resume profile deleted!');
+        }
+        
+        return redirect()->route('profile')->with('error', 'No digital resume found.');
     }
 
     public function deleteApplication($id)

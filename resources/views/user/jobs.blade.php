@@ -166,7 +166,7 @@
 
 {{-- NEW PURPLE GRADIENT HEADER --}}
 <header style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 18px 0; box-shadow: 0 4px 20px rgba(0,0,0,0.15); position: sticky; top: 0; z-index: 1000;">
-    < at the top of the file
+   
 
     <div style="max-width: 1400px; margin: 0 auto; padding: 0 30px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
         <div style="display: flex; align-items: center; gap: 12px;">

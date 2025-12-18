@@ -8,12 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Poppins', sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
@@ -24,46 +19,11 @@
         }
 
         /* Floating elements */
-        .floating-circles {
-            position: fixed;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            z-index: 0;
-            pointer-events: none;
-        }
-
-        .circle {
-            position: absolute;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.1);
-            animation: float 20s infinite ease-in-out;
-        }
-
-        .circle:nth-child(1) {
-            width: 80px;
-            height: 80px;
-            top: 10%;
-            left: 10%;
-            animation-delay: 0s;
-        }
-
-        .circle:nth-child(2) {
-            width: 120px;
-            height: 120px;
-            top: 60%;
-            right: 10%;
-            animation-delay: 5s;
-        }
-
-        .circle:nth-child(3) {
-            width: 60px;
-            height: 60px;
-            bottom: 20%;
-            left: 20%;
-            animation-delay: 10s;
-        }
-
+        .floating-circles { position: fixed; width: 100%; height: 100%; overflow: hidden; z-index: 0; pointer-events: none; }
+        .circle { position: absolute; border-radius: 50%; background: rgba(255, 255, 255, 0.1); animation: float 20s infinite ease-in-out; }
+        .circle:nth-child(1) { width: 80px; height: 80px; top: 10%; left: 10%; animation-delay: 0s; }
+        .circle:nth-child(2) { width: 120px; height: 120px; top: 60%; right: 10%; animation-delay: 5s; }
+        .circle:nth-child(3) { width: 60px; height: 60px; bottom: 20%; left: 20%; animation-delay: 10s; }
         @keyframes float {
             0%, 100% { transform: translateY(0px) translateX(0px); }
             25% { transform: translateY(-30px) translateX(20px); }
@@ -72,464 +32,74 @@
         }
 
         /* Navigation */
-        .navbar {
-            position: sticky;
-            top: 0;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            padding: 15px 0;
-            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
-            z-index: 1000;
-        }
-
-        .nav-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 30px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: #667eea;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 30px;
-            align-items: center;
-        }
-
-        .nav-links a {
-            text-decoration: none;
-            color: #555;
-            font-weight: 500;
-            transition: color 0.3s;
-            position: relative;
-        }
-
-        .nav-links a:hover {
-            color: #667eea;
-        }
-
-        .user-menu {
-            position: relative;
-        }
-
-        .user-icon-nav {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: 600;
-            cursor: pointer;
-            transition: transform 0.3s;
-            font-size: 1.2rem;
-        }
-
-        .user-icon-nav:hover {
-            transform: scale(1.1);
-        }
-
-        .dropdown {
-            position: absolute;
-            top: 50px;
-            right: 0;
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.15);
-            min-width: 160px;
-            opacity: 0;
-            visibility: hidden;
-            transform: translateY(-10px);
-            transition: all 0.3s;
-            z-index: 10000;
-        }
-
-        .dropdown.active {
-            opacity: 1;
-            visibility: visible;
-            transform: translateY(0);
-        }
-
-        .dropdown a {
-            display: block;
-            padding: 12px 20px;
-            color: #555;
-            text-decoration: none;
-            transition: background 0.3s;
-        }
-
-        .dropdown a:first-child {
-            border-radius: 10px 10px 0 0;
-        }
-
-        .dropdown a:last-child {
-            border-radius: 0 0 10px 10px;
-        }
-
-        .dropdown a:hover {
-            background: #f5f5f5;
-        }
+        .navbar { position: sticky; top: 0; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); padding: 15px 0; box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1); z-index: 1000; }
+        .nav-container { max-width: 1400px; margin: 0 auto; padding: 0 30px; display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-size: 1.8rem; font-weight: 700; color: #667eea; }
+        .nav-links { display: flex; gap: 30px; align-items: center; }
+        .nav-links a { text-decoration: none; color: #555; font-weight: 500; transition: color 0.3s; }
+        .nav-links a:hover { color: #667eea; }
+        .user-menu { position: relative; }
+        .user-icon-nav { width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, #667eea, #764ba2); display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; cursor: pointer; transition: transform 0.3s; font-size: 1.2rem; }
+        .user-icon-nav:hover { transform: scale(1.1); }
+        .dropdown { position: absolute; top: 50px; right: 0; background: white; border-radius: 10px; box-shadow: 0 5px 25px rgba(0, 0, 0, 0.15); min-width: 160px; opacity: 0; visibility: hidden; transform: translateY(-10px); transition: all 0.3s; z-index: 10000; }
+        .dropdown.active { opacity: 1; visibility: visible; transform: translateY(0); }
+        .dropdown a { display: block; padding: 12px 20px; color: #555; text-decoration: none; transition: background 0.3s; }
+        .dropdown a:hover { background: #f5f5f5; }
 
         /* Main Container */
-        .container {
-            position: relative;
-            z-index: 1;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 40px 20px;
-        }
-
-        .page-title {
-            text-align: center;
-            color: white;
-            font-size: 2.5rem;
-            margin-bottom: 40px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
-        }
+        .container { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; padding: 40px 20px; }
+        .page-title { text-align: center; color: white; font-size: 2.5rem; margin-bottom: 40px; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1); }
 
         /* Success Message */
-        .success-message {
-            background: #d4edda;
-            color: #155724;
-            padding: 15px 20px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            border: 1px solid #c3e6cb;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
+        .success-message { background: #d4edda; color: #155724; padding: 15px 20px; border-radius: 10px; margin-bottom: 20px; border: 1px solid #c3e6cb; display: flex; align-items: center; gap: 10px; }
+        .error-message { background: #f8d7da; color: #721c24; padding: 15px 20px; border-radius: 10px; margin-bottom: 20px; border: 1px solid #f5c6cb; }
 
         /* Profile Card */
-        .profile-card {
-            background: white;
-            border-radius: 20px;
-            padding: 40px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
-            margin-bottom: 30px;
-        }
+        .profile-card { background: white; border-radius: 20px; padding: 40px; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1); margin-bottom: 30px; }
+        .avatar-section { text-align: center; margin-bottom: 40px; }
+        .avatar-container { position: relative; display: inline-block; }
+        .user-avatar { width: 150px; height: 150px; border-radius: 50%; background: linear-gradient(135deg, #667eea, #764ba2); display: flex; align-items: center; justify-content: center; font-size: 4rem; color: white; margin: 0 auto; box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15); }
+        .change-avatar-btn { position: absolute; bottom: 5px; right: 5px; width: 40px; height: 40px; border-radius: 50%; background: #f093fb; border: 3px solid white; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; transition: transform 0.3s; }
+        .change-avatar-btn:hover { transform: scale(1.1); }
+        .avatar-options { display: none; margin-top: 20px; gap: 15px; justify-content: center; flex-wrap: wrap; }
+        .avatar-options.active { display: flex; }
+        .avatar-option { width: 60px; height: 60px; border-radius: 50%; background: linear-gradient(135deg, #f5f7fa, #c3cfe2); display: flex; align-items: center; justify-content: center; font-size: 2rem; cursor: pointer; transition: all 0.3s; border: 3px solid transparent; }
+        .avatar-option:hover { transform: scale(1.1); border-color: #667eea; }
 
-        /* User Avatar Section */
-        .avatar-section {
-            text-align: center;
-            margin-bottom: 40px;
-        }
-
-        .avatar-container {
-            position: relative;
-            display: inline-block;
-        }
-
-        .user-avatar {
-            width: 150px;
-            height: 150px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 4rem;
-            color: white;
-            margin: 0 auto;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
-        }
-
-        .change-avatar-btn {
-            position: absolute;
-            bottom: 5px;
-            right: 5px;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: #f093fb;
-            border: 3px solid white;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2rem;
-            transition: transform 0.3s;
-        }
-
-        .change-avatar-btn:hover {
-            transform: scale(1.1);
-        }
-
-        .avatar-options {
-            display: none;
-            margin-top: 20px;
-            gap: 15px;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
-        .avatar-options.active {
-            display: flex;
-        }
-
-        .avatar-option {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2rem;
-            cursor: pointer;
-            transition: all 0.3s;
-            border: 3px solid transparent;
-        }
-
-        .avatar-option:hover {
-            transform: scale(1.1);
-            border-color: #667eea;
-        }
-
-        /* User Info Section */
-        .info-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-
-        .info-item {
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            padding: 20px;
-            border-radius: 15px;
-        }
-
-        .info-label {
-            font-size: 0.9rem;
-            color: #666;
-            margin-bottom: 5px;
-        }
-
-        .info-value {
-            font-size: 1.3rem;
-            font-weight: 600;
-            color: #333;
-        }
-
-        .edit-icon {
-            cursor: pointer;
-            font-size: 1rem;
-            color: #667eea;
-            float: right;
-        }
+        /* Info Grid */
+        .info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-bottom: 30px; }
+        .info-item { background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); padding: 20px; border-radius: 15px; }
+        .info-label { font-size: 0.9rem; color: #666; margin-bottom: 5px; }
 
         /* Resume Section */
-        .resume-section {
-            background: white;
-            border-radius: 20px;
-            padding: 40px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
-            margin-bottom: 30px;
-        }
+        .resume-section { background: white; border-radius: 20px; padding: 40px; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1); margin-bottom: 30px; }
+        .section-title { font-size: 1.8rem; color: #667eea; margin-bottom: 20px; font-weight: 600; }
 
-        .section-title {
-            font-size: 1.8rem;
-            color: #667eea;
-            margin-bottom: 20px;
-            font-weight: 600;
-        }
+        /* AI Card Styles */
+        .ai-encouragement-card { background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%); border-radius: 20px; padding: 30px; margin: 20px 0; text-align: center; box-shadow: 0 10px 40px rgba(102, 126, 234, 0.3); color: white; display: none; }
+        .encouragement-icon { font-size: 3rem; margin-bottom: 15px; animation: pulse 2s infinite; }
+        .encouragement-text { font-size: 1.3rem; font-weight: 600; margin-bottom: 20px; line-height: 1.6; }
+        .completion-bar { background: rgba(255, 255, 255, 0.3); height: 12px; border-radius: 20px; overflow: hidden; margin-bottom: 10px; }
+        .completion-fill { background: linear-gradient(90deg, #ffd700, #ff8c00); height: 100%; border-radius: 20px; transition: width 1s ease; }
+        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
 
-        .resume-upload-area {
-            border: 2px dashed #667eea;
-            border-radius: 15px;
-            padding: 40px;
-            text-align: center;
-            background: #f8f9ff;
-            cursor: pointer;
-            transition: all 0.3s;
-            margin-bottom: 20px;
-        }
+        /* Test & Apply Lists */
+        .test-results, .job-apply-list { background: white; border-radius: 20px; padding: 40px; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1); margin-bottom: 30px; }
+        .test-item, .apply-item { background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); padding: 20px; border-radius: 15px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; }
+        .mbti-badge { background: #f093fb; color: white; padding: 5px 15px; border-radius: 20px; font-size: 0.9rem; font-weight: 600; }
+        
+        .status-badge { padding: 5px 12px; border-radius: 20px; font-size: 0.85rem; font-weight: 600; margin-left: 10px; }
+        .status-pending { background: #fff3cd; color: #856404; }
+        .status-reviewed { background: #cfe2ff; color: #084298; }
+        .status-accepted { background: #d1e7dd; color: #0a3622; }
+        .status-rejected { background: #f8d7da; color: #721c24; }
+        
+        .erase-btn { padding: 8px 16px; background: #e53935; color: white; border: none; border-radius: 20px; font-size: 0.8rem; font-weight: 600; cursor: pointer; transition: background 0.3s; }
+        .erase-btn:hover { background: #d32f2f; }
 
-        .resume-upload-area:hover {
-            background: #f0f2ff;
-        }
-
-        /* Test Results Section */
-        .test-results {
-            background: white;
-            border-radius: 20px;
-            padding: 40px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
-            margin-bottom: 30px;
-        }
-
-        .test-item {
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            padding: 20px;
-            border-radius: 15px;
-            margin-bottom: 15px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .test-date {
-            color: #666;
-            font-size: 0.9rem;
-        }
-
-        .test-result {
-            font-weight: 600;
-            color: #667eea;
-            font-size: 1.1rem;
-        }
-
-        .mbti-badge {
-            background: #f093fb;
-            color: white;
-            padding: 5px 15px;
-            border-radius: 20px;
-            font-size: 0.9rem;
-            font-weight: 600;
-        }
-
-        /* Job Apply List Section */
-        .job-apply-list {
-            background: white;
-            border-radius: 20px;
-            padding: 40px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
-            margin-bottom: 30px;
-        }
-
-        .apply-item {
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            padding: 20px;
-            border-radius: 15px;
-            margin-bottom: 15px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .apply-info {
-            flex: 1;
-        }
-
-        .apply-job-name {
-            font-weight: 600;
-            color: #667eea;
-            font-size: 1.1rem;
-        }
-
-        .apply-company {
-            color: #666;
-            font-size: 0.9rem;
-            margin-top: 4px;
-        }
-
-        .apply-date {
-            color: #888;
-            font-size: 0.8rem;
-            margin-top: 4px;
-        }
-
-        .status-badge {
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            margin-left: 10px;
-        }
-
-        .status-pending {
-            background: #fff3cd;
-            color: #856404;
-        }
-
-        .status-reviewed {
-            background: #cfe2ff;
-            color: #084298;
-        }
-
-        .status-accepted {
-            background: #d1e7dd;
-            color: #0a3622;
-        }
-
-        .status-rejected {
-            background: #f8d7da;
-            color: #721c24;
-        }
-
-        .erase-btn {
-            padding: 8px 16px;
-            background: #e53935;
-            color: white;
-            border: none;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
-
-        .erase-btn:hover {
-            background: #d32f2f;
-        }
-
-        .no-applications {
-            text-align: center;
-            color: #666;
-            font-style: italic;
-        }
-
-        /* Back Button */
-        .back-button {
-            text-align: center;
-            margin-top: 40px;
-            margin-bottom: 60px;
-        }
-
-        .back-btn {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-            border: none;
-            padding: 20px 80px;
-            font-size: 1.3rem;
-            font-weight: 600;
-            border-radius: 50px;
-            cursor: pointer;
-            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
-            transition: all 0.3s;
-            text-decoration: none;
-            display: inline-block;
-        }
-
-        .back-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.4);
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .container {
-                padding: 20px 10px;
-            }
-
-            .nav-links {
-                gap: 15px;
-            }
-
-            .nav-links a {
-                font-size: 0.9rem;
-            }
-        }
+        .back-btn { background: linear-gradient(135deg, #667eea, #764ba2); color: white; border: none; padding: 20px 80px; font-size: 1.3rem; font-weight: 600; border-radius: 50px; cursor: pointer; box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3); text-decoration: none; display: inline-block; }
+        
+        @media (max-width: 768px) { .container { padding: 20px 10px; } .info-grid { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
@@ -568,108 +138,29 @@
     <div class="container">
         <h1 class="page-title">User Profile</h1>
 
-        <!-- AI ENCOURAGEMENT SECTION - Add this after your page title -->
-        <div class="ai-encouragement-card" id="aiEncouragementCard" style="display: none;">
+        <!-- AI Encouragement Section -->
+        <div class="ai-encouragement-card" id="aiEncouragementCard">
             <div class="encouragement-icon">💜</div>
-            <div class="encouragement-text" id="encouragementText">
-                Loading your personalized message...
-            </div>
+            <div class="encouragement-text" id="encouragementText">Loading your personalized message...</div>
             <div class="completion-bar">
                 <div class="completion-fill" id="completionFill" style="width: 0%"></div>
             </div>
             <div class="completion-label" id="completionLabel">0% Complete</div>
         </div>
 
-        <style>
-        .ai-encouragement-card {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
-            border-radius: 20px;
-            padding: 30px;
-            margin: 20px 0;
-            text-align: center;
-            box-shadow: 0 10px 40px rgba(102, 126, 234, 0.3);
-            animation: slideDown 0.5s ease;
-            color: white;
-        }
-
-        @keyframes slideDown {
-            from { opacity: 0; transform: translateY(-20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .encouragement-icon {
-            font-size: 3rem;
-            margin-bottom: 15px;
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-        }
-
-        .encouragement-text {
-            font-size: 1.3rem;
-            font-weight: 600;
-            margin-bottom: 20px;
-            line-height: 1.6;
-        }
-
-        .completion-bar {
-            background: rgba(255, 255, 255, 0.3);
-            height: 12px;
-            border-radius: 20px;
-            overflow: hidden;
-            margin-bottom: 10px;
-        }
-
-        .completion-fill {
-            background: linear-gradient(90deg, #ffd700, #ff8c00);
-            height: 100%;
-            border-radius: 20px;
-            transition: width 1s ease;
-        }
-
-        .completion-label {
-            font-size: 1rem;
-            font-weight: 600;
-            color: white;
-        }
-        </style>
-
-        <script>
-        // Fetch AI encouragement on page load
-        document.addEventListener('DOMContentLoaded', function() {
-            fetch('/ai/profile-encouragement', {
-                method: 'GET',
-                headers: {
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-                    'Accept': 'application/json'
-                }
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    document.getElementById('encouragementText').textContent = data.message;
-                    document.getElementById('completionFill').style.width = data.completion + '%';
-                    document.getElementById('completionLabel').textContent = data.completion + '% Complete';
-                    document.getElementById('aiEncouragementCard').style.display = 'block';
-                }
-            })
-            .catch(error => {
-                console.log('AI encouragement not loaded:', error);
-            });
-        });
-        </script>
-
         @if(session('success'))
         <div class="success-message">
-            <i class="fas fa-check-circle"></i>
-            {{ session('success') }}
+            <i class="fas fa-check-circle"></i> {{ session('success') }}
+        </div>
+        @endif
+        
+        @if(session('error'))
+        <div class="error-message">
+            <i class="fas fa-exclamation-circle"></i> {{ session('error') }}
         </div>
         @endif
 
-        <!-- Profile Card -->
+        <!-- 1. Profile Card (Avatar & Info) -->
         <div class="profile-card">
             <!-- Avatar Section -->
             <div class="avatar-section">
@@ -722,126 +213,141 @@
                     </div>
                 </div>
                 
-                <button type="submit" style="background: linear-gradient(135deg, #667eea, #764ba2); color: white; border: none; padding: 12px 40px; border-radius: 25px; font-weight: 600; cursor: pointer; font-size: 1rem;">
-                    <i class="fas fa-save"></i> Save Changes
-                </button>
+                <div style="text-align: center;">
+                    <button type="submit" style="background: linear-gradient(135deg, #667eea, #764ba2); color: white; border: none; padding: 12px 40px; border-radius: 25px; font-weight: 600; cursor: pointer; font-size: 1rem;">
+                        <i class="fas fa-save"></i> Save Changes
+                    </button>
+                </div>
             </form>
         </div>
 
-        <!-- Resume Section -->
-<div class="resume-section">
-    <h2 class="section-title">📄 Resume</h2>
-    
-    @if(auth()->user()->resume)
-        <div style="background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); padding: 25px; border-radius: 15px; margin-bottom: 20px;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-                <div>
-                    <h3 style="color: #667eea; font-size: 1.3rem; margin-bottom: 5px;">
-                        {{ auth()->user()->resume->job_title }}
-                    </h3>
-                    <p style="color: #666; font-size: 0.95rem;">
-                        Last updated: {{ auth()->user()->resume->updated_at->format('M d, Y') }}
-                    </p>
-                </div>
-                <div>
-                    <a href="{{ route('buildresume') }}" style="background: #667eea; color: white; padding: 10px 20px; border-radius: 10px; text-decoration: none; font-weight: 600; display: inline-block; margin-right: 10px;">
-                        ✏️ Edit Resume
-                    </a>
-                    <button onclick="alert('Download feature coming soon!')" style="background: #10b981; color: white; padding: 10px 20px; border-radius: 10px; border: none; font-weight: 600; cursor: pointer;">
-                        📥 Download PDF
-                    </button>
-                </div>
-            </div>
+        <!-- 2. Resume Section (Updated) -->
+        <div class="resume-section">
+            <h2 class="section-title">📄 Resume Management</h2>
             
-            <!-- Resume Preview -->
-            <div style="background: white; padding: 20px; border-radius: 12px;">
-                <div style="border-bottom: 2px solid #667eea; padding-bottom: 10px; margin-bottom: 15px;">
-                    <h4 style="color: #333; font-size: 1.1rem;">Personal Information</h4>
-                </div>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; font-size: 0.9rem;">
-                    <div>
-                        <strong>Name:</strong> {{ auth()->user()->resume->first_name }} {{ auth()->user()->resume->last_name }}
-                    </div>
-                    <div>
-                        <strong>Email:</strong> {{ auth()->user()->resume->email }}
-                    </div>
-                    <div>
-                        <strong>Phone:</strong> {{ auth()->user()->resume->phone ?? 'Not provided' }}
-                    </div>
-                    <div>
-                        <strong>Location:</strong> {{ auth()->user()->resume->city ?? 'Not provided' }}, {{ auth()->user()->resume->country ?? 'Malaysia' }}
-                    </div>
-                </div>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px;">
                 
-                @if(auth()->user()->resume->summary)
-                <div style="margin-top: 20px;">
-                    <div style="border-bottom: 2px solid #667eea; padding-bottom: 10px; margin-bottom: 15px;">
-                        <h4 style="color: #333; font-size: 1.1rem;">Professional Summary</h4>
-                    </div>
-                    <p style="color: #555; line-height: 1.6;">{{ auth()->user()->resume->summary }}</p>
-                </div>
-                @endif
-                
-                @if(auth()->user()->resume->experience_company)
-                <div style="margin-top: 20px;">
-                    <div style="border-bottom: 2px solid #667eea; padding-bottom: 10px; margin-bottom: 15px;">
-                        <h4 style="color: #333; font-size: 1.1rem;">Work Experience</h4>
-                    </div>
-                    <div>
-                        <strong style="color: #667eea;">{{ auth()->user()->resume->experience_title }}</strong>
-                        <div style="color: #666; font-size: 0.9rem; margin: 5px 0;">
-                            {{ auth()->user()->resume->experience_company }} | {{ auth()->user()->resume->experience_duration }}
+                <!-- A. Uploaded File Resume -->
+                <div style="background: #f8f9ff; padding: 25px; border-radius: 15px; border: 2px dashed #667eea;">
+                    <h3 style="color: #4a5568; font-size: 1.2rem; margin-bottom: 15px; display: flex; align-items: center; gap: 8px;">
+                        <i class="fas fa-file-upload"></i> Uploaded Resume File
+                    </h3>
+
+                    @if(auth()->user()->resume_path)
+                        <!-- File Exists State -->
+                        <div style="text-align: center; padding: 20px 0;">
+                            <div style="font-size: 3rem; color: #e53e3e; margin-bottom: 10px;">
+                                <i class="fas fa-file-pdf"></i>
+                            </div>
+                            <p style="color: #667eea; font-weight: 600; margin-bottom: 5px;">Resume Uploaded</p>
+                            <p style="color: #718096; font-size: 0.85rem; margin-bottom: 20px;">
+                                Uploaded on {{ auth()->user()->updated_at->format('M d, Y') }}
+                            </p>
+                            
+                            <div style="display: flex; justify-content: center; gap: 10px;">
+                                <a href="{{ Storage::url(auth()->user()->resume_path) }}" target="_blank" style="background: #667eea; color: white; padding: 8px 16px; border-radius: 8px; text-decoration: none; font-size: 0.9rem; font-weight: 600;">
+                                    <i class="fas fa-eye"></i> View
+                                </a>
+                                
+                                <button onclick="document.getElementById('update-resume-form').style.display='block'; this.style.display='none';" style="background: #ecc94b; color: #744210; border: none; padding: 8px 16px; border-radius: 8px; cursor: pointer; font-size: 0.9rem; font-weight: 600;">
+                                    <i class="fas fa-sync-alt"></i> Update
+                                </button>
+
+                                <form action="{{ route('profile.deleteResumeFile') }}" method="POST" style="display: inline;" onsubmit="return confirm('Are you sure you want to delete your resume file?')">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" style="background: #fc8181; color: white; border: none; padding: 8px 16px; border-radius: 8px; cursor: pointer; font-size: 0.9rem; font-weight: 600;">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </form>
+                            </div>
+
+                            <!-- Hidden Update Form -->
+                            <div id="update-resume-form" style="display: none; margin-top: 20px; border-top: 1px solid #e2e8f0; padding-top: 15px;">
+                                <form action="{{ route('profile.uploadResume') }}" method="POST" enctype="multipart/form-data">
+                                    @csrf
+                                    <input type="file" name="resume" accept=".pdf,.doc,.docx" required style="font-size: 0.9rem; margin-bottom: 10px; width: 100%;">
+                                    <button type="submit" style="background: #48bb78; color: white; border: none; padding: 8px 20px; border-radius: 8px; font-weight: 600; cursor: pointer;">Upload New File</button>
+                                </form>
+                            </div>
                         </div>
-                        <p style="color: #555; margin-top: 8px;">{{ auth()->user()->resume->experience_description }}</p>
-                    </div>
-                </div>
-                @endif
-                
-                @if(auth()->user()->resume->education_institution)
-                <div style="margin-top: 20px;">
-                    <div style="border-bottom: 2px solid #667eea; padding-bottom: 10px; margin-bottom: 15px;">
-                        <h4 style="color: #333; font-size: 1.1rem;">Education</h4>
-                    </div>
-                    <div>
-                        <strong style="color: #667eea;">{{ auth()->user()->resume->education_degree }}</strong>
-                        <div style="color: #666; font-size: 0.9rem; margin: 5px 0;">
-                            {{ auth()->user()->resume->education_institution }} | {{ auth()->user()->resume->education_year }}
+                    @else
+                        <!-- No File State -->
+                        <div style="text-align: center; padding: 20px 0;">
+                            <p style="color: #718096; margin-bottom: 15px;">Upload your existing resume (PDF/DOCX)</p>
+                            <form action="{{ route('profile.uploadResume') }}" method="POST" enctype="multipart/form-data">
+                                @csrf
+                                <div style="margin-bottom: 15px;">
+                                    <input type="file" name="resume" accept=".pdf,.doc,.docx" required style="font-size: 0.9rem; margin-left: 20px;">
+                                </div>
+                                <button type="submit" style="background: linear-gradient(135deg, #667eea, #764ba2); color: white; border: none; padding: 10px 25px; border-radius: 25px; font-weight: 600; cursor: pointer; transition: transform 0.2s;">
+                                    <i class="fas fa-cloud-upload-alt"></i> Upload Resume
+                                </button>
+                            </form>
                         </div>
-                    </div>
+                    @endif
                 </div>
-                @endif
-                
-                @if(auth()->user()->resume->skills)
-                <div style="margin-top: 20px;">
-                    <div style="border-bottom: 2px solid #667eea; padding-bottom: 10px; margin-bottom: 15px;">
-                        <h4 style="color: #333; font-size: 1.1rem;">Skills</h4>
-                    </div>
-                    <div style="display: flex; flex-wrap: wrap; gap: 8px;">
-                        @foreach(explode(',', auth()->user()->resume->skills) as $skill)
-                            <span style="background: #667eea; color: white; padding: 6px 14px; border-radius: 20px; font-size: 0.85rem; font-weight: 600;">
-                                {{ trim($skill) }}
-                            </span>
-                        @endforeach
-                    </div>
+
+                <!-- B. Digital Resume Builder -->
+                <div style="background: linear-gradient(135deg, #f5f7fa 0%, #e2e8f0 100%); padding: 25px; border-radius: 15px; border: 1px solid #cbd5e0;">
+                    <h3 style="color: #2d3748; font-size: 1.2rem; margin-bottom: 15px; display: flex; align-items: center; gap: 8px;">
+                        <i class="fas fa-magic"></i> Digital Resume Profile
+                    </h3>
+
+                    @if(auth()->user()->resume)
+                        <!-- Digital Resume Exists -->
+                        <div>
+                            <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
+                                <div style="width: 60px; height: 60px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                                    @if(auth()->user()->resume->photo)
+                                        <img src="{{ Storage::url(auth()->user()->resume->photo) }}" style="width:100%; height:100%; border-radius:50%; object-fit:cover;">
+                                    @else
+                                        💼
+                                    @endif
+                                </div>
+                                <div>
+                                    <div style="font-weight: 700; color: #2d3748; font-size: 1.1rem;">{{ auth()->user()->resume->job_title }}</div>
+                                    <div style="font-size: 0.85rem; color: #718096;">Updated: {{ auth()->user()->resume->updated_at->diffForHumans() }}</div>
+                                </div>
+                            </div>
+
+                            <div style="background: white; padding: 15px; border-radius: 10px; margin-bottom: 20px; font-size: 0.9rem; color: #4a5568; max-height: 100px; overflow: hidden; position: relative;">
+                                <strong>Summary:</strong> {{ auth()->user()->resume->summary ?? 'No summary added yet.' }}
+                                <div style="position: absolute; bottom: 0; left: 0; width: 100%; height: 30px; background: linear-gradient(to bottom, transparent, white);"></div>
+                            </div>
+
+                            <div style="display: flex; gap: 10px;">
+                                <a href="{{ route('buildresume') }}" style="flex: 1; text-align: center; background: #4299e1; color: white; padding: 10px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 0.9rem;">
+                                    <i class="fas fa-edit"></i> Edit Profile
+                                </a>
+                                <form action="{{ route('profile.deleteResumeRecord') }}" method="POST" onsubmit="return confirm('Delete your digital resume profile? This cannot be undone.')">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" style="background: white; color: #e53e3e; border: 1px solid #e53e3e; padding: 10px 15px; border-radius: 8px; cursor: pointer; font-size: 0.9rem;">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    @else
+                        <!-- No Digital Resume -->
+                        <div style="text-align: center; padding: 30px 0;">
+                            <div style="font-size: 2.5rem; margin-bottom: 15px;">🚀</div>
+                            <p style="color: #4a5568; margin-bottom: 20px; font-size: 0.95rem;">
+                                Don't have a resume file? <br>Build a professional digital profile in minutes!
+                            </p>
+                            <a href="{{ route('buildresume') }}" style="display: inline-block; background: linear-gradient(135deg, #4299e1 0%, #667eea 100%); color: white; padding: 12px 30px; border-radius: 25px; text-decoration: none; font-weight: 700; box-shadow: 0 4px 10px rgba(66, 153, 225, 0.4); transition: transform 0.2s;">
+                                ✨ Build Resume Now
+                            </a>
+                        </div>
+                    @endif
                 </div>
-                @endif
             </div>
         </div>
-    @else
-        <div class="resume-options">
-            <p style="text-align: center; color: #666; margin-bottom: 20px; font-size: 1.1rem;">
-                You haven't created a resume yet. Build one now to apply for jobs!
-            </p>
-            <a href="{{ route('buildresume') }}" style="display: block; text-align: center; background: linear-gradient(135deg, #667eea, #764ba2); color: white; padding: 15px 30px; border-radius: 15px; text-decoration: none; font-weight: 600; font-size: 1.1rem;">
-                🛠️ Build Your Resume Now
-            </a>
-        </div>
-    @endif
-</div>
 
-        <!-- Test Results Section -->
+        <!-- 3. Test Results Section -->
         <div class="test-results">
-            <h2 class="section-title">🎯 Personality Test Results (Latest 3)</h2>
+            <h2 class="section-title">🎯 Personality Test Results</h2>
             
             @forelse($testHistory as $test)
             <div class="test-item">
@@ -856,7 +362,7 @@
             @endforelse
         </div>
 
-        <!-- Job Apply List Section -->
+        <!-- 4. Job Applications Section -->
         <div class="job-apply-list">
             <h2 class="section-title">📋 Job Application History</h2>
             
@@ -877,7 +383,7 @@
                 </div>
             </div>
             @empty
-            <p class="no-applications">
+            <p style="text-align: center; color: #666; font-style: italic;">
                 No job applications yet. 
                 <a href="{{ route('jobs') }}" style="color: #667eea; font-weight: 600;">Browse jobs!</a>
             </p>
@@ -885,7 +391,7 @@
         </div>
 
         <!-- Back Button -->
-        <div class="back-button">
+        <div style="text-align: center; margin-top: 40px; margin-bottom: 60px;">
             <a href="{{ route('homepage') }}" class="back-btn">🏠 Back to Homepage</a>
         </div>
     </div>
@@ -897,7 +403,6 @@
             dropdown.classList.toggle('active');
         }
 
-        // Close dropdown when clicking outside
         window.onclick = function(event) {
             if (!event.target.matches('.user-icon-nav')) {
                 const dropdown = document.getElementById('userDropdown');
@@ -919,6 +424,29 @@
             document.getElementById('avatarOptions').classList.remove('active');
             document.getElementById('profile-form').submit();
         }
+
+        // AI Encouragement
+        document.addEventListener('DOMContentLoaded', function() {
+            fetch('/ai/profile-encouragement', {
+                method: 'GET',
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                    'Accept': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    document.getElementById('encouragementText').textContent = data.message;
+                    document.getElementById('completionFill').style.width = data.completion + '%';
+                    document.getElementById('completionLabel').textContent = data.completion + '% Complete';
+                    document.getElementById('aiEncouragementCard').style.display = 'block';
+                }
+            })
+            .catch(error => {
+                console.log('AI encouragement not loaded:', error);
+            });
+        });
     </script>
 </body>
 </html>

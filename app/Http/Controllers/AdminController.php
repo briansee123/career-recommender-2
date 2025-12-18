@@ -2,58 +2,79 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
 use App\Models\User;
-use App\Models\JobListing;
+use App\Models\JobListing; // Uses the correct model
 use App\Models\JobApplication;
 use App\Models\TestResult;
-use App\Models\TestQuestion;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
 class AdminController extends Controller
 {
     public function dashboard()
     {
+        // 1. Basic Stats
         $totalUsers = User::where('is_admin', 0)->count();
         $totalJobs = JobListing::count();
         $totalApplications = JobApplication::count();
-        $testsTaken = TestResult::count();
+        $totalTests = TestResult::count();
         
+        // 2. Growth Stats (Fixes the Undefined Variable error)
         $newUsersThisMonth = User::where('is_admin', 0)
-            ->whereMonth('created_at', now()->month)
+            ->where('created_at', '>=', now()->subDays(30))
             ->count();
-        
-        $applicationsThisWeek = JobApplication::whereBetween('created_at', [
-            now()->startOfWeek(),
-            now()->endOfWeek()
-        ])->count();
-        
-        $activeUsersToday = User::where('is_admin', 0)
-            ->whereDate('updated_at', today())
-            ->count();
+            
+        $applicationsThisWeek = JobApplication::where('created_at', '>=', now()->subWeek())->count();
+        $activeJobs = JobListing::where('status', 'active')->count();
+        $activeUsersToday = User::whereDate('created_at', today())->count();
         
         return view('admin.dashboard', compact(
-            'totalUsers',
-            'totalJobs',
-            'totalApplications',
-            'testsTaken',
-            'newUsersThisMonth',
-            'applicationsThisWeek',
+            'totalUsers', 
+            'totalJobs', 
+            'totalApplications', 
+            'totalTests',
+            'newUsersThisMonth', // <--- variable passed here
+            'applicationsThisWeek', 
+            'activeJobs', 
             'activeUsersToday'
         ));
     }
 
-    public function users()
+    // --- Profile Management ---
+    public function profile()
     {
-        $users = User::where('is_admin', 0)->orderBy('created_at', 'desc')->paginate(15);
+        return view('admin.profile');
+    }
+
+    public function updateProfile(Request $request)
+    {
+        $user = auth()->user();
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email,' . $user->id,
+            'avatar' => 'nullable|string|max:10'
+        ]);
+        $user->update($request->all());
+        return redirect()->back()->with('success', 'Profile updated successfully');
+    }
+
+    // --- User Management ---
+    public function users(Request $request)
+    {
+        $query = User::query();
+        if ($request->filled('search')) {
+            $query->where('name', 'like', '%' . $request->search . '%')
+                  ->orWhere('email', 'like', '%' . $request->search . '%');
+        }
+        $users = $query->orderBy('created_at', 'desc')->paginate(10);
         return view('admin.users', compact('users'));
     }
 
     public function createUser(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email',
+            'name' => 'required|string',
+            'email' => 'required|email|unique:users',
             'password' => 'required|string|min:6',
             'is_admin' => 'required|boolean'
         ]);
@@ -61,7 +82,7 @@ class AdminController extends Controller
         User::create([
             'name' => $request->name,
             'email' => $request->email,
-            'password' => Hash::make($request->password),
+            'password' => $request->password, // Model handles hashing
             'is_admin' => $request->is_admin,
             'status' => 'active'
         ]);
@@ -71,115 +92,51 @@ class AdminController extends Controller
 
     public function deleteUser($id)
     {
-        $user = User::findOrFail($id);
-        
-        // Prevent deleting admin accounts
-        if ($user->is_admin) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Cannot delete admin accounts!'
-            ], 403);
+        if (auth()->id() == $id) {
+            return response()->json(['success' => false, 'message' => 'Cannot delete yourself'], 403);
         }
-        
-        $user->delete();
-        
-        return response()->json([
-            'success' => true,
-            'message' => 'User deleted successfully'
-        ]);
+        User::destroy($id);
+        return response()->json(['success' => true, 'message' => 'User deleted successfully']);
     }
 
+    // --- Job Management ---
     public function jobs()
-{
-    $jobs = JobListing::orderBy('created_at', 'desc')->paginate(10);
-    return view('admin.jobs', compact('jobs'));
-}
+    {
+        $jobs = JobListing::orderBy('created_at', 'desc')->paginate(10);
+        return view('admin.jobs', compact('jobs'));
+    }
 
     public function createJob(Request $request)
     {
-        $request->validate([
-            'title' => 'required|string|max:255',
-            'company' => 'required|string|max:255',
-            'location' => 'required|string|max:255',
+        $data = $request->validate([
+            'title' => 'required',
+            'company' => 'required',
+            'location' => 'required',
+            'job_type' => 'required',
+            'status' => 'required',
+            'description' => 'required',
             'salary_min' => 'nullable|numeric',
             'salary_max' => 'nullable|numeric',
-            'job_type' => 'required|string',
-            'description' => 'required|string',
-            'requirements' => 'nullable|string',
-            'status' => 'required|in:active,inactive,blocked'
         ]);
+        
+        $data['salary'] = ($request->salary_min && $request->salary_max) 
+            ? "MYR {$request->salary_min} - {$request->salary_max}" 
+            : 'Negotiable';
 
-        JobListing::create($request->all());
-
-        return response()->json(['success' => true]);
+        JobListing::create($data);
+        return redirect()->back()->with('success', 'Job created successfully');
     }
 
     public function updateJob(Request $request, $id)
     {
         $job = JobListing::findOrFail($id);
-
-        $request->validate([
-            'title' => 'required|string|max:255',
-            'company' => 'required|string|max:255',
-            'location' => 'required|string|max:255',
-            'salary_min' => 'nullable|numeric',
-            'salary_max' => 'nullable|numeric',
-            'job_type' => 'required|string',
-            'description' => 'required|string',
-            'requirements' => 'nullable|string',
-            'status' => 'required|in:active,inactive,blocked'
-        ]);
-
         $job->update($request->all());
-
-        return response()->json(['success' => true]);
+        return redirect()->back()->with('success', 'Job updated successfully');
     }
 
     public function deleteJob($id)
     {
-        $job = JobListing::findOrFail($id);
-        $job->delete();
-
-        return response()->json(['success' => true]);
+        JobListing::destroy($id);
+        return redirect()->back()->with('success', 'Job deleted successfully');
     }
-
-    public function questions()
-    {
-        $questions = TestQuestion::active()->ordered()->get();
-        return view('admin.questions', compact('questions'));
-    }
-
-    public function updateQuestions(Request $request)
-    {
-        $questions = $request->questions;
-        
-        foreach ($questions as $q) {
-            TestQuestion::where('id', $q['id'])->update([
-                'question' => $q['question']
-            ]);
-        }
-        
-        return response()->json(['success' => true]);
-    }
-
-    public function profile()
-    {
-        $user = auth()->user();
-        return view('admin.profile', compact('user'));
-    }
-
-    public function updateProfile(Request $request)
-    {
-        $user = auth()->user();
-
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email,' . $user->id,
-            'avatar' => 'nullable|string|max:10'
-        ]);
-
-        $user->update($request->only(['name', 'email', 'avatar']));
-
-        return redirect()->route('admin.profile')->with('success', 'Profile updated successfully!');
-    }
-}   
+}
