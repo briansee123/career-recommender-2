@@ -99,12 +99,13 @@
             </div>
             <div style="margin-bottom: 15px;">
                 <label style="display: block; color: #e2e8f0; margin-bottom: 5px;">Job Type *</label>
-                <select name="job_type" id="job_type" required style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #334155; background: #0f172a; color: #e2e8f0;">
-                    <option value="Full Time">Full Time</option>
-                    <option value="Part Time">Part Time</option>
-                    <option value="Contract">Contract</option>
-                    <option value="Internship">Internship</option>
-                </select>
+                <select name="job_type" id="job_type" required style="...">
+    <!-- Values must match: 'full-time', 'part-time', 'contract', 'internship' -->
+    <option value="full-time">Full Time</option>
+    <option value="part-time">Part Time</option>
+    <option value="contract">Contract</option>
+    <option value="internship">Internship</option>
+</select>
             </div>
             <div style="margin-bottom: 15px;">
                 <label style="display: block; color: #e2e8f0; margin-bottom: 5px;">Description *</label>

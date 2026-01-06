@@ -107,25 +107,26 @@ class AdminController extends Controller
     }
 
     public function createJob(Request $request)
-    {
-        $data = $request->validate([
-            'title' => 'required',
-            'company' => 'required',
-            'location' => 'required',
-            'job_type' => 'required',
-            'status' => 'required',
-            'description' => 'required',
-            'salary_min' => 'nullable|numeric',
-            'salary_max' => 'nullable|numeric',
-        ]);
-        
-        $data['salary'] = ($request->salary_min && $request->salary_max) 
-            ? "MYR {$request->salary_min} - {$request->salary_max}" 
-            : 'Negotiable';
+{
+    $data = $request->validate([
+        'title' => 'required',
+        'company' => 'required',
+        'location' => 'required',
+        // Update this line to allow only the specific enum values
+        'job_type' => 'required|in:full-time,part-time,contract,internship',
+        'status' => 'required|in:active,inactive,blocked',
+        'description' => 'required',
+        'salary_min' => 'nullable|numeric',
+        'salary_max' => 'nullable|numeric',
+    ]);
+    
+    $data['salary'] = ($request->salary_min && $request->salary_max) 
+        ? "MYR {$request->salary_min} - {$request->salary_max}" 
+        : 'Negotiable';
 
-        JobListing::create($data);
-        return redirect()->back()->with('success', 'Job created successfully');
-    }
+    JobListing::create($data);
+    return redirect()->back()->with('success', 'Job created successfully');
+}
 
     public function updateJob(Request $request, $id)
     {
